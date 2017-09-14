@@ -1,0 +1,39 @@
+.mess {
+    display: none;
+    width: 100%;
+    overflow: hidden;
+}
+.mess-title {
+    padding-left: 25%;
+    width: 944px;
+    height: 60px;
+    line-height: 60px;
+    background-color: #33a09a;
+    color: #fff;
+}
+.mess-name {
+    margin-right: 25%;
+}
+.create,
+.add-var {
+    margin-top: 50px;
+}
+.template {
+    display: none;
+    width: 100%;
+    text-align: center;
+}
+.template > select {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    border: 0;
+    font-size: 16px;
+}
+.template option {
+    width: 100%;
+    height: 40px;
+}
+.template > p {
+    margin-top: 50px;
+}

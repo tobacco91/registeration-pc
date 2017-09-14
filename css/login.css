@@ -1,0 +1,82 @@
+html{
+  height:100%;
+}
+body {
+    margin: 0;
+    background: url(../imgs/bg1.jpg);
+    background-size: 100% 100%;
+}
+h3 {
+    margin: 0;
+}
+.container {
+    margin: 0 auto;
+    margin-top: 200px;
+    width: 500px;
+    height: 300px;
+    border: 1px solid #e4e1ea;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    text-align: center;
+}
+.title {
+    margin-top: 30px;
+    font-size: 26px;
+}
+.login-form {
+    margin: 0 auto;
+    width: 340px;
+    margin-top: 20px;
+}
+.control-label {
+    float: left;
+    width: 80px;
+    height: 34px;
+    line-height: 34px;
+    text-align: right;
+}
+.control-group {
+    position: relative;
+    height: 60px;
+    overflow: hidden;
+}
+#user,
+#pwd {
+    float: left;
+    margin-left: 12px;
+    padding: 0 8px;
+    width: 200px;
+    height: 34px;
+    line-height: 34px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    background: transparent;
+    color: #472c2c;
+    font-size: 16px;
+    outline: none;  
+}
+.input-tip {
+    position: absolute;
+    left: 15px;
+    bottom: 1px;
+    font-size: 14px;
+    color: #ff5400;
+}
+label {
+    font-size: 16px;
+}
+#login {
+    margin: 16px 0 0 94px;
+    width: 80px;
+    height: 40px;
+    border: 0;
+    border-radius: 5px;
+    background-color: #1abc9c;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    letter-spacing: 1px;
+    outline: none;
+    cursor: pointer;
+}

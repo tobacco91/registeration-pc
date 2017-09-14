@@ -1,0 +1,149 @@
+html {
+    height: 100%;
+}
+body {
+    margin: 0;
+    height: 100%;
+}
+ul, 
+p,
+th,
+thead,
+tr,
+td{
+    margin: 0;
+    padding: 0;
+}
+ul {
+    list-style:none;
+}
+a{
+    color: #fff;
+    text-decoration:none;
+    cursor: pointer;
+}
+button {
+    border: 0;
+    outline: none;
+}
+input,
+select,
+textarea {
+    outline: none;
+}
+.sidebar {
+    float: left;
+    width: 20%;
+    height: 100%;
+    color: #fff;
+    background-color: #33a09a;
+    text-align: center;
+}
+.sidebar .active {
+    background-color: #76cac5;    
+}
+.tabs {
+    height: 40px;
+    line-height: 40px;
+}
+.tabs:hover {
+    background-color: #76cac5;
+    cursor: pointer;
+}
+/*设置一级导航样式*/   
+.nav {
+    width: 100%;
+}
+.nav ul li { 
+    position: relative;
+    float: left;
+    width: 100%; 
+    height: 40px;
+}
+.nav ul li a {
+    display: block;
+    width: 100%;
+    height: 40px; 
+    line-height: 40px; 
+    text-align: center;
+}
+.nav ul li a:hover { 
+    background-color: #76cac5;
+}
+ 
+/*设置二级导航样式*/
+.nav ul li ul {
+    display: none;
+}
+.nav ul li:hover ul {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 100%;
+    width: 80px;
+    background-color: #30bed7;
+}
+.nav ul li:hover ul li a {
+    display:block;
+    width:80px;
+    height:40px;
+    line-height:40px;
+    text-align:center;
+}
+.nav ul li:hover ul li a:hover {
+    background-color: #76cac5;
+}
+ 
+/*设置三级导航样式*/
+.nav ul li:hover ul li ul { 
+    display: none;
+}
+.nav ul li:hover ul li:hover ul{
+    position: absolute; 
+    top: 0px; 
+    left: 80px; 
+    display: block; 
+    width: 100px; 
+    background-color: #b4b4b4;
+}
+.nav ul li:hover ul li:hover ul li a { 
+    display: block; 
+    width: 100px; 
+    height: 40px; 
+    line-height: 40px; 
+    text-align: center; 
+}
+.nav ul li:hover ul li:hover ul li a:hover { 
+    background-color: #76cac5;
+}
+.content-group {
+    float: left;
+    width: 80%;
+}
+.b-btn,
+.r-btn,
+.s-btn {
+    padding: 6px 10px;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+.b-btn {
+    background: #30b1d7;
+}
+.r-btn {
+    background-color: #fe6b62;
+}
+.s-btn {
+    background-color: #76cac5;
+}
+.g-btn {
+    margin: 0 auto;
+    width: 100px;
+    height: 40px;
+    border-radius: 6px;
+    line-height: 40px;
+    background-color: #76cac5;
+    color: #fff;
+    text-align: center;
+}

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>test</title>
+<style type = "text/css">
+/*设置通配符样式*/
+*{
+    margin:0; 
+    padding:0;
+}
+body{
+    font-size:12px;
+}
+ul{
+    list-style:none;
+}
+a{
+    text-decoration:none;
+}
+ 
+/*设置二级导航样式*/   
+.nav {
+    width:500px; 
+    height:30px;
+    background-color:#b4b4b4;
+    /*导航栏居中*/
+    margin:auto;
+}
+.nav ul li { 
+    width:100px; 
+    height:30px; 
+    float:left; 
+    position:relative;
+}
+.nav ul li a {
+    display:block;
+    width:96px; 
+    border:2px solid gray; 
+    height:26px; 
+    line-height:26px; 
+    text-align:center;
+}
+.nav ul li a:hover { 
+    background-color:yellow;
+}
+ 
+/*设置一级导航样式*/
+.nav ul li ul{
+    display:none;
+}
+.nav ul li:hover ul{
+    display:block;
+    width:100px;
+    position:absolute;
+    top:30px;
+    left:0;
+    background-color:white;
+}
+.nav ul li:hover ul li a{
+    display:block;
+    width:96px;
+    height:26px;
+    line-height:26px;
+    border:2px solid gray;
+    text-align:center;
+}
+.nav ul li:hover ul li a:hover{
+    background-color:orange;
+}
+ 
+/*设置三级导航样式*/
+.nav ul li:hover ul li ul { 
+    display:none;
+}
+.nav ul li:hover ul li:hover ul{ 
+    display:block; 
+    width:100px; 
+    position:absolute; 
+    top:0px; 
+    left:100px;
+    background-color:#b4b4b4;
+}
+.nav ul li:hover ul li:hover ul li { 
+    width:100px; 
+    height:30px; 
+}
+.nav ul li:hover ul li:hover ul li a { 
+    display:block; 
+    width:96px; 
+    height:26px; 
+    line-height:26px; 
+    border:2px solid gray; 
+    text-align:center; 
+}
+.nav ul li:hover ul li:hover ul li a:hover { 
+    background-color:#00CC00;
+}
+ 
+</style>
+</head>
+<body>
+<div class = "nav">
+<ul>
+<li><a href = "#">一级导航</a>
+    <ul>
+    <li><a href = "#">二级导航</a>
+        <ul>
+            <li><a href = "#">三级导航</a></li>
+            <li><a href = "#">三级导航</a></li>
+            <li><a href = "#">三级导航</a></li>
+        </ul>
+    </li>     
+    <li><a href = "#">二级导航</a>
+        <ul>
+            <li><a href = "#">三级导航</a></li>
+            <li><a href = "#">三级导航</a></li>
+            <li><a href = "#">三级导航</a></li>
+        </ul>
+    </li>     
+    <li><a href = "#">二级导航</a>
+        <ul>
+            <li><a href = "#">三级导航</a></li>
+            <li><a href = "#">三级导航</a></li>
+            <li><a href = "#">三级导航</a></li>
+        </ul>
+    </li>     
+    </ul>
+</li>
+</ul>
+<!--             <ul>
+                <li>请选择模板</li>
+                <li>产品招新</li>
+                <li>视觉招新</li>
+                <li>WEB招新</li>
+                <li>移动招新</li>
+                <li>SRE招新</li>
+            </ul> -->
+</div>
+</body>
+</html>

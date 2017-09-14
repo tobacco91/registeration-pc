@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="h-cmn">
+<head>
+    <meta charset="UTF-8">
+    <title>报名系统</title>
+    <link rel="stylesheet" href="./css/manage.css">
+    <link rel="stylesheet" type="text/css" href="./iconfont/iconfont.css">
+    <link rel="stylesheet" href="./css/data.css">
+    <link rel="stylesheet" href="./css/message.css">
+    <link rel="stylesheet" href="./css/account.css">
+    <link rel="stylesheet" href="./css/activity.css">
+    <link rel="stylesheet" href="./css/edit.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="nav tabs">
+            <ul>
+                <li><a href="#">数据管理</a>
+                    <ul>
+                        <li><a href="#">产品</a>
+                            <ul>
+                                <li><a href="#">第一轮面试</a></li>
+                                <li><a href="#">第二轮面试</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">视觉</a>
+                            <ul>
+                                <li><a href="#">第一轮面试</a></li>
+                                <li><a href="#">第二轮面试</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">WEB</a>
+                            <ul>
+                                <li><a href="#">第一轮面试</a></li>
+                                <li><a href="#">第二轮面试</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">移动</a>
+                            <ul>
+                                <li><a href="#">第一轮面试</a></li>
+                                <li><a href="#">第二轮面试</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">SRE</a>
+                            <ul>
+                                <li><a href="#">第一轮面试</a></li>
+                                <li><a href="#">第二轮面试</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="message tabs">短信模板</div>
+        <div class="account tabs">账户管理</div>
+        <div class="acti-manage tabs">活动管理</div>
+    </div>
+    <div class="edit content">
+        <div class="edit-main">
+            <i class="iconfont icon-close"></i>
+            <h3 class="title">编辑数据</h3>
+            <form action="" method="post">
+                <p>姓名：<input type="text" id="edit-user"></p>
+                <p>部门：
+                    <select>
+                        <option value="">产品</option>
+                        <option value="">视觉</option>
+                        <option value="">WEB</option>
+                        <option value="">移动</option>
+                        <option value="">SRE</option>
+                    </select>
+                </p>
+                <p>手机号：<input type="text" id="edit-phone"></p>
+                <button type="button" id="edit-finish">完成</button>
+            </form>
+        </div><!--数据管理-->
+        <div class="test-main">
+            <i class="iconfont icon-close"></i>
+            <h3>请填写接受测试的手机号：</h3>
+            <div><input type="text" class="test-phone"></div>
+            <button type="button" id="start-test">开始测试</button>
+        </div><!--测试按钮红色的那个-->
+        <div class="add-acco-main">
+            <i class="iconfont icon-close"></i>
+            <form action="" method="post">
+                <p>用户名：<input type="text" id="edit-user"></p>
+                <p>密码：<input type="text" id="edit-phone"></p>
+                <p>权限：
+                    <select>
+                        <option value="">产品</option>
+                        <option value="">视觉</option>
+                    </select>
+                </p>
+                <button type="button" id="acco-finish">完成</button>
+            </form>
+        </div><!--添加账户-->
+        <div class="add-acti-main">
+            <i class="iconfont icon-close"></i>
+            <form action="" method="post">
+                <h3>添加活动</h3>
+                <p>活动名称：<input type="text" class="acti-name"></p>
+                <p>最多人数：<input type="text" class="max-num"></p></p>
+                <p>活动地点：<input type="text" class="acti-location"></p></p>
+                <p>开始日期：<input type="datetime-local" class="acti-st" value="2016-09-30T15:25:33"></p>
+                <p>截止日期：<input type="datetime-local" class="acti-et" value="2016-09-30T15:25:33"></p>
+                <p>时间描述：<input type="text" class="time-des"></p>
+                <p>活动简介：<textarea class="acti-summary"></textarea></p>
+                <button type="button" id="confirm-add-acti">确定添加</button>
+            </form> 
+        </div><!--添加活动-->
+    </div><!-- end edit -->
+    <div class="content-group">
+        <div class="data content">
+            <div class="data-title-message">
+                <p class="data-title">
+                    <span class="type">产品</span>-<span class="order">第一次面试</span>
+                </p>
+                <p class="data-total">
+                    共有：<span class="number">77人</span>  
+                </p>
+                <button class="send b-btn">发信息</button>
+                <i class="iconfont icon-add1"></i>
+            </div>
+            <table>
+                <thead>
+                    <tr class="messages-title">
+                        <th class="check"><input type="checkbox" id="all"></th>
+                        <th class="name">姓名</th>
+                        <th class="department">部门</th>
+                        <th class="status">报名情况</th>
+                        <th class="phone">手机号</th>
+                        <th class="mod">修改信息</th>
+                        <th class="finish">完成</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="check"><input type="checkbox"></td>
+                        <td class="name">杜若</td>
+                        <td class="department">产品</td>
+                        <td class="status">已报名</td>
+                        <td class="phone">12345678901</td>
+                        <td class="mod mod-btn"><button class="r-btn">修改</button></td>
+                        <td class="finish fin-btn"><button class="b-btn">移动</button></td>
+                    </tr>
+                    <tr>
+                        <td class="check"><input type="checkbox"></td>
+                        <td class="name">杜若</td>
+                        <td class="department">产品</td>
+                        <td class="status">已报名</td>
+                        <td class="phone">12345678901</td>
+                        <td class="mod mod-btn"><button class="r-btn">修改</button></td>
+                        <td class="finish fin-btn"><button class="b-btn">移动</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><!-- 点击数据管理 -->
+        <div class="mess content">
+            <div class="mess-title">
+                <span class="mess-name">模板名称</span>
+                <span class="">操作</span>
+            </div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>产品第一次招新</td>
+                        <td><button class="r-btn">删除</button></td>
+                        <td class="test"><button class="b-btn">测试</button></td>
+                    </tr>
+                    <tr>
+                        <td>产品第二次招新</td>
+                        <td><button class="r-btn">删除</button></td>
+                        <td class="test"><button class="b-btn">测试</button> </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="create g-btn">创建新模板</div>
+        </div><!-- end mess -->
+        <div class="template content">
+            <select>
+                <option selected="selected" disabled="disabled"  style='display: none' value=''>请选择模板</option> 
+                <option>产品招新</option>
+                <option>视觉招新</option>
+                <option>WEB招新</option>
+                <option>移动招新</option>
+                <option>SRE招新</option>
+            </select>
+            <p>亲爱的()同学，恭喜你通过(),请于()来参加().</p>
+            <div class="add-var g-btn">添加变量</div>
+        </div><!-- 点击短信模版 -->
+        <div class="acco content">
+            <table>
+                <thead>
+                    <tr>
+                        <th>用户名</th>
+                        <th>密码</th>
+                        <th>权限</th>
+                        <th>功能</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>杜若</td>
+                        <td>329dfjkaghjklpoi</td>
+                        <td>
+                            <select name="" id="">
+                                <option value=""></option>
+                                <option value=""></option>
+                            </select>
+                        </td>
+                        <td><span class="r-btn">删除</span></td>
+                    </tr>
+                    <tr>
+                        <td>杜若</td>
+                        <td>adfjk</td>
+                        <td>
+                            <select name="" id="">
+                                <option value=""></option>
+                                <option value=""></option>
+                            </select>
+                        </td>
+                        <td><span class="r-btn">删除</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="add-acco">
+                <div class="b-btn">添加</div>
+            </div>
+        </div><!-- 点击账户管理 -->
+        <div class="acti content">
+            <span class="add-acti"><i class="iconfont icon-add1" onclick="actiAdd()">增加新活动</i></span>
+            <div class="acti-fn">
+                <div class="search">
+                    <input type="text" placeholder="查找" class="search-acti">
+                    <i class="iconfont icon-search3"></i>
+                </div>
+                <div class="add-acti">
+                    <i class="iconfont icon-add1"></i>
+                </div>
+            </div>
+            <div class="acti-main">
+            </div>
+        </div><!-- click活动 -->
+        <div class="acti-details content">
+            <h2>产品策划及运营部招新活动</h2>
+            <h3>已有32人报名</h3>
+            <span class="add-acti"><i class="iconfont icon-add1" onclick="actiAdd()">增加新流程</i></span>
+            <div class="acti-details-interview">
+                <div class="interview">
+                    <div class="fir-inter">1.第一次面试</div>
+                    <span class="s-btn acti-start">开始</span>
+                    <span class="r-btn acti-modi">修改</span>
+                    <span class="b-btn acti-dele">删除</span>
+                    <span class="add-acti"><i class="iconfont icon-add1"></i></span>
+                </div>
+                <div class="interview">
+                    <div class="sec-inter">2.第二次面试</div>
+                    <span class="s-btn acti-start">开始</span>
+                    <span class="r-btn acti-modi">修改</span>
+                    <span class="b-btn acti-dele">删除</span>
+                    <span class="add-acti"><i class="iconfont icon-add1"></i></span>
+                </div>
+                
+            </div>
+
+        </div><!-- end acti-details -->
+    </div>
+</body>
+<script src="js/vue.js"></script>
+<script src="js/manage.js"></script>
+</html>

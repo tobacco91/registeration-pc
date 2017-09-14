@@ -1,0 +1,22 @@
+.acco {
+    display: none;
+}
+table {
+    width: 90%;
+    overflow-y: scroll;
+}
+.acco table {
+    float: left;
+}
+.add-acco {
+    float: left;
+    width: 10%;
+}
+.add-acco > div {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 auto;
+    width: 40px;
+    text-align: center;
+}
