@@ -1,6 +1,6 @@
 var url = 'http://hongyan.cqupt.edu.cn/activity/api/',
     lastcontentGroupClick = $('.acti');
-    console.log(lastcontentGroupClick)
+    console.log(sessionStorage.token)
 function $(ele) {
     if (document.querySelectorAll(ele).length === 1) {
         return document.querySelector(ele);
@@ -14,18 +14,17 @@ function ajax(conf) {
     var url = conf.url;
     var success = conf.success;
     var error = conf.error;
-    var type = conf.type;
+    var type = type === undefined ? 'json' :  conf.type;
     var data = conf.data;
     var xhr = new XMLHttpRequest();
+    var urlData = '';
     var successInfo = new RegExp("2[0-9]{2}");
     var errorInfo = new RegExp("4|5[0-9]{2}");
     if(method.toLowerCase() !== 'post') {
-        var urlData = '';
         for(var key in data) {
             urlData += key + '=' + data[key] + '&';
         }
         url = url + '?' + urlData.substring(0,urlData.length-1);
-        console.log(url)
     }
     xhr.open(method, url, true);
     if (method.toLowerCase() === 'get') {
@@ -35,8 +34,11 @@ function ajax(conf) {
             xhr.setRequestHeader('content-type', 'application/json');
             xhr.send(JSON.stringify(data));
         } else if (type.toLowerCase() === 'form') {
+            for(var key in data) {
+                urlData += key + '=' + data[key] + '&';
+            }
             xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
-            xhr.send(data);
+            xhr.send(urlData.substring(0,urlData.length-1));
         }
     } else if (method.toLowerCase() === 'put') {
         xhr.send(null);
@@ -44,11 +46,13 @@ function ajax(conf) {
         xhr.send(null);
     }
     xhr.onreadystatechange = function () {
+
         if (xhr.readyState === 4 && successInfo.test(xhr.status)) {
             success(JSON.parse(xhr.responseText));
         } else if (errorInfo.test(xhr.status)) {
+            console.log(xhr.status)
             if(error !== undefined) {
-                error(xhr.responseText);
+                error(JSON.parse(xhr.responseText));
             }
         }
     };
@@ -99,7 +103,7 @@ $('.acti-manage').addEventListener('click',function() {
                     <div class="acti-title" onClick="showDetail(${ele.activity_id})"><a>${ele.activity_name}</a></div>
                     <span class="s-btn acti-start">开始</span>
                     <span class="r-btn acti-modi">修改</span>
-                    <span class="b-btn acti-dele">删除</span>
+                    <span class="b-btn acti-dele">关闭</span>
                 </div>`;
             })
             $('.acti-main').innerHTML = inner;
@@ -129,14 +133,16 @@ function showDetail(act_key) {
         success: function(res) {
             $('.acti-details').children[0].innerHTML = res.data.activity_name;
             $('.acti-details').children[1].innerHTML = `已有${res.data.current_num}人报名`;
+            $('.acti-details').children[2].innerHTML = res.data.time_description;
+            $('.acti-details').children[3].innerHTML = res.data.summary;
             $('.acti-details-interview').innerHTML = '';
+            console.log(res)
             res.data.flowList.map(function(e) {
-                console.log(e)
                 $('.acti-details-interview').innerHTML += `<div class="interview">
-                    <div class="fir-inter">${e.flow_id}.第${e.flow_id}次面试(${e.location})</div>
-                    <span class="s-btn acti-start" onclick="actiStart(${e.activity_key})">详情</span>
-                    <span class="r-btn acti-modi" onclick="actiChange(${e.activity_key})">修改</span>
-                    <span class="b-btn acti-dele" onclick="actiDelete(${e.activity_key})">删除</span>
+                    <div class="fir-inter">${e.flow_id}.第${e.flow_id}次测试(${e.location})</div>
+                    <span class="s-btn acti-start" onclick="actiShow(${e.flow_id})">详情</span>
+                    <span class="r-btn acti-modi" onclick="actiChange(${e.flow_id})">修改</span>
+                    <span class="b-btn acti-dele" onclick="actiDelete(${e.flow_id})">删除</span>
                 </div>`;
             })
             lastcontentGroupClick.style.display = 'none';
@@ -166,32 +172,82 @@ $('.acti-main').addEventListener('click',function(e){
             $('.edit').style.display = 'block';
             $('.add-acti-main').style.display = 'block';
             $('#confirm-add-acti').setAttribute('act-key',act_key);
+            $('#confirm-add-acti').setAttribute('change-type','change');
             break; 
         case 'b-btn acti-dele':
+            ajax({
+                method: 'put',
+                url: url + 'act/' + act_key + '/end',
+                data: {
+                    token: sessionStorage.token
+                },
+                success: function(res) { 
+                    alert(res.message);
+                }
+            })
             break;
     
     } 
 })
-
+//console.log($('.add-activity'))
+$('.add-activity').addEventListener('click',function(){
+        $('.edit').style.display = 'block';
+        $('.add-acti-main').style.display = 'block';
+        $('#confirm-add-acti').setAttribute('change-type','add');
+}) 
 //添加修改活动
 $('#confirm-add-acti').addEventListener('click',function() {
-    console.log( $('.acti-summary').innerText, $('.acti-summary').value)
-    ajax({
-        method: 'put',
-        url: url + 'act/' + $('#confirm-add-acti').getAttribute('act-key'),
+    console.log($('.acti-st').value.replace('T',' ')) 
+    var method = 'post';
+    var nowUrl = url + 'act?token=' + sessionStorage.token;
+    if($('#confirm-add-acti').getAttribute('change-type') === 'change') {
+        method = 'put';
+        nowUrl = url + 'act/' + $('#confirm-add-acti').getAttribute('act-key');
+    }
+        // console.log(JSON.stringify({
+        //     token: sessionStorage.token,
+        //     activity_name: $('.acti-name').value,
+        //     summary: $('.acti-summary').value,
+        //     max_num: $('.max-num').value, //人数限制，若修改的值低于已报名的人数会返回错误
+        //     location:$('.acti-location').value,
+        //     start_time: $('.acti-st').value.replace('T',' '),
+        //     end_time: $('.acti-et').value.replace('T',' '),
+        //     time_description: $('.time-des').value //以上数据可单个发送请求
+        // }))
+     ajax({
+        method: method,
+        url: nowUrl,
         data: {
             token: sessionStorage.token,
             activity_name: $('.acti-name').value,
             summary: $('.acti-summary').value,
             max_num: $('.max-num').value, //人数限制，若修改的值低于已报名的人数会返回错误
             location:$('.acti-location').value,
-            start_time: $('.acti-st').value,
-            end_time: $('.acti-et').value,
+            start_time: $('.acti-st').value.replace('T',' '),
+            end_time: $('.acti-et').value.replace('T',' '),
             time_description: $('.time-des').value //以上数据可单个发送请求
+        },
+        success: function(res) {
+            $('.edit').style.display = 'none';
+            $('.add-acti-main').style.display = 'none';
+            alert(res.message)
+            $('.acti-manage').click();
+        },
+        error: function(error) {
+            alert(error.message)
+        }
+    })
+})
+function actiDelete(flow_id) {
+    ajax({
+        method: 'delete',
+        url: url + 'flow/' + flow_id,
+        data: {
+            token: sessionStorage.token,
+            flow_id: flow_id
         },
         success: function(res) {
             console.log(res)
         }
-
     })
-})
+}
