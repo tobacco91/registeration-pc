@@ -80,6 +80,16 @@
             <div><input type="text" class="test-phone"></div>
             <button type="button" id="start-test">开始测试</button>
         </div><!--测试按钮红色的那个-->
+        <div class="add-mess-main">
+            <i class="iconfont icon-close"></i>
+            <div>
+                <p>模板名称<input type="text" class="add-mess-title"></p>
+                <p>内容<input type="text" class="add-mess-content"></p>
+                <p>时间地点<input type="text" class="add-mess-date"></p>
+                <p class="add-mess-p">模板序号：<input type="text" class="add-mess-id"></p>
+                <button type="button" id="add-mess-finish">完成</button>
+            </div>
+        </div><!--新增一个短信模版-->
         <div class="add-acco-main">
             <i class="iconfont icon-close"></i>
             <form action="" method="post">
@@ -161,17 +171,7 @@
                 <span class="">操作</span>
             </div>
             <table>
-                <tbody>
-                    <tr>
-                        <td>产品第一次招新</td>
-                        <td><button class="r-btn">删除</button></td>
-                        <td class="test"><button class="b-btn">测试</button></td>
-                    </tr>
-                    <tr>
-                        <td>产品第二次招新</td>
-                        <td><button class="r-btn">删除</button></td>
-                        <td class="test"><button class="b-btn">测试</button> </td>
-                    </tr>
+                <tbody class="mess-tbody">
                 </tbody>
             </table>
             <div class="create g-btn">创建新模板</div>
@@ -185,7 +185,9 @@
                 <option>移动招新</option>
                 <option>SRE招新</option>
             </select>
-            <p>亲爱的()同学，恭喜你通过(),请于()来参加().</p>
+            <div class="templet-model">
+                
+            </div>
             <div class="add-var g-btn">添加变量</div>
         </div><!-- 点击短信模版 -->
         <div class="acco content">

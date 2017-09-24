@@ -122,11 +122,15 @@ textarea {
 }
 .b-btn,
 .r-btn,
-.s-btn {
+.s-btn,
+.x-btn {
     padding: 6px 10px;
     border-radius: 4px;
     color: #fff;
     cursor: pointer;
+}
+.x-btn {
+    background-color: #76cac5;
 }
 .b-btn {
     background: #30b1d7;

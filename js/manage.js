@@ -20,14 +20,14 @@ function ajax(conf) {
     var urlData = '';
     var successInfo = new RegExp("2[0-9]{2}");
     var errorInfo = new RegExp("4|5[0-9]{2}");
-    if(method.toLowerCase() !== 'post') {
+    if(method.toLowerCase() === 'get' || method.toLowerCase() === 'delete') {
         for(var key in data) {
             urlData += key + '=' + data[key] + '&';
         }
         url = url + '?' + urlData.substring(0,urlData.length-1);
     }
     xhr.open(method, url, true);
-    if (method.toLowerCase() === 'get') {
+    if (method.toLowerCase() === 'get' || method.toLowerCase() === 'delete') {
         xhr.send(null);
     } else if (method.toLowerCase() === 'post') {
         if (type.toLowerCase() === 'json') {
@@ -41,15 +41,16 @@ function ajax(conf) {
             xhr.send(urlData.substring(0,urlData.length-1));
         }
     } else if (method.toLowerCase() === 'put') {
-        xhr.send(null);
-    } else if(method.toLowerCase() === 'delete') {
-        xhr.send(null);
+            for(var key in data) {
+                urlData += key + '=' + data[key] + '&';
+            }
+            xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+            xhr.send(urlData.substring(0,urlData.length-1));
     }
     xhr.onreadystatechange = function () {
-
         if (xhr.readyState === 4 && successInfo.test(xhr.status)) {
             success(JSON.parse(xhr.responseText));
-        } else if (errorInfo.test(xhr.status)) {
+        } else if (xhr.readyState === 4 && errorInfo.test(xhr.status)) {
             console.log(xhr.status)
             if(error !== undefined) {
                 error(JSON.parse(xhr.responseText));
@@ -65,6 +66,11 @@ $('.edit').addEventListener('click',function(e) {
         e.target.parentNode.style.display = 'none';
     }
 })
+//打开弹框
+function openEdit(ele) {
+    $('.edit').style.display = 'block';
+    ele.style.display = 'block';
+}
 // ajax({
 //     method: 'put',
 //     url: url + 'act/1000',
@@ -77,9 +83,9 @@ $('.edit').addEventListener('click',function(e) {
 // })
 //显示活动
 $('.acti-manage').addEventListener('click',function() {
+    $('.acti').style.display = 'block';
     if(lastcontentGroupClick !== $('.acti')) {
         lastcontentGroupClick.style.display = 'none';
-        $('.acti').style.display = 'block';
         lastcontentGroupClick = $('.acti');
     }
     ajax({
@@ -251,3 +257,144 @@ function actiDelete(flow_id) {
         }
     })
 }
+
+
+
+
+
+
+//短信模板
+//显示短信模板
+$('.message').addEventListener('click',() => {
+    if(lastcontentGroupClick !== $('.mess')) {
+        $('.mess').style.display = 'block';
+        lastcontentGroupClick.style.display = 'none';
+        lastcontentGroupClick = $('.mess');
+    }
+    ajax({
+        method: 'get',
+        url: url + 'sms/',
+        data: {
+            token: sessionStorage.token,
+        },
+        success: function(res) {
+            if(Object.prototype.toString.call(res) !== '[object Array]') {
+                res.data = [res.data];
+            }
+            let tr = res.data.map((item) => {
+
+                return(`
+                    <tr admin-temp-id=${item.temp_id}>
+                        <td>${item.temp_name}</td>
+                        <td>${item.was_test}</td>
+                        <td><button class="r-btn">删除</button></td>
+                        <td><button class="x-btn">修改</button></td>
+                        <td class="test"><button class="b-btn">测试</button></td>
+                    </tr>
+                `)
+            })
+            $('.mess-tbody').innerHTML = tr;
+        }
+    })
+})
+//创建新模板
+$('.create').addEventListener('click',() => {
+    if(lastcontentGroupClick !== $('.template')) {
+        $('.template').style.display = 'block';
+        lastcontentGroupClick.style.display = 'none';
+        lastcontentGroupClick = $('.template');
+        ajax({
+            method: 'get',
+            url: url + 'sms/templet',
+            data: {
+                token: sessionStorage.token
+            },
+            success: function(res) {
+                const p = res.data.map((item,index) => {
+                    return `<p>序号：${item.admin_temp_id} 模板内容：${item.sms_temp}</p>`
+                })
+                $('.templet-model').innerHTML = p;
+            }
+        })
+    }
+})
+//测试 修改 删除 短信模板
+$('.mess-tbody').addEventListener('click',(e) => {
+    if(e.target.classList.contains('b-btn')) {
+        openEdit($('.test-main'));
+        $('#start-test').setAttribute('admin-temp-id',e.target.parentNode.parentNode.getAttribute('admin-temp-id'));
+    }else if(e.target.classList.contains('x-btn')) {
+        $('.add-mess-p').style.display = 'none';
+        openEdit($('.add-mess-main'));
+        $('#add-mess-finish').setAttribute('change-type','change');
+        $('#add-mess-finish').setAttribute('admin-temp-id',e.target.parentNode.parentNode.getAttribute('admin-temp-id'));
+    }
+    
+})
+$('#start-test').addEventListener('click',() => {
+    ajax({
+        method: 'POST',
+        url: url + 'sms/test?token='+ sessionStorage.token,
+        data: {
+            rec_num: $('.test-phone').value,
+  	        temp_id: parseInt($('#start-test').getAttribute('admin-temp-id'))
+        },
+        success: function(res) {
+            console.log(res)
+        }
+    })
+})
+//添加变量 
+$('.add-var').addEventListener('click',() => {
+    openEdit($('.add-mess-main'));
+    let p = document.createElement('p');
+    $('.add-mess-p').style.display = 'block';
+    $('#add-mess-finish').setAttribute('change-type','add');
+
+})
+
+
+//点击短信模板增加or修改的完成按钮
+$('#add-mess-finish').addEventListener('click',() => {
+
+    if($('#add-mess-finish').getAttribute('change-type') === 'change') {
+        ajax({
+            method: 'put',
+            url: url + 'sms/'+ $('#add-mess-finish').getAttribute('admin-temp-id') + '?token=' + sessionStorage.token,
+            data: {
+                admin_temp_id:  $('#add-mess-finish').getAttribute('admin-temp-id'),
+                temp_name: $('.add-mess-title').value,
+                'variables[name]': '${full_name}',
+                'variables[content]': 'lala',
+                'variables[next]': '13232131'
+    
+            },
+            success: function(res) {
+                console.log(res)
+            },
+            error: function(res) {
+                console.log(res)
+            }
+        })
+    } else if($('#add-mess-finish').getAttribute('change-type') === 'add') {
+        ajax({
+            method: 'post',
+            url: url + 'sms/?token=' + sessionStorage.token,
+            data: {
+                admin_temp_id:  1,
+                temp_name: $('.add-mess-title').value,
+                'variables[name]': '${full_name}',
+                'variables[content]': 'lala',
+                'variables[next]': '13232131'
+    
+            },
+            success: function(res) {
+
+            },
+            error: function(res) {
+                console.log(res)
+            }
+        })
+    }
+
+})

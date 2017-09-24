@@ -1,0 +1,21 @@
+{
+  "name": "registeration-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RedrockTeam/activity-management.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RedrockTeam/activity-management/issues"
+  },
+  "homepage": "https://github.com/RedrockTeam/activity-management#readme"
+}
