@@ -14,7 +14,7 @@ function ajax(conf) {
     var url = conf.url;
     var success = conf.success;
     var error = conf.error;
-    var type = type === undefined ? 'json' :  conf.type;
+    var type = conf.type === undefined ? 'form' :  conf.type;
     var data = conf.data;
     var xhr = new XMLHttpRequest();
     var urlData = '';
@@ -165,10 +165,7 @@ $('.acti-main').addEventListener('click',function(e){
         case 's-btn acti-start': 
             ajax({
                 method: 'put',
-                url: url + 'act/' + act_key + '/start',
-                data: {
-                    token: sessionStorage.token
-                },
+                url: url + 'act/' + act_key + '/start?token='+ sessionStorage.token,
                 success: function(res) { 
                     alert(res.message);
                 }
@@ -183,10 +180,7 @@ $('.acti-main').addEventListener('click',function(e){
         case 'b-btn acti-dele':
             ajax({
                 method: 'put',
-                url: url + 'act/' + act_key + '/end',
-                data: {
-                    token: sessionStorage.token
-                },
+                url: url + 'act/' + act_key + '/end?token=' + sessionStorage.token,
                 success: function(res) { 
                     alert(res.message);
                 }
@@ -203,12 +197,11 @@ $('.add-activity').addEventListener('click',function(){
 }) 
 //添加修改活动
 $('#confirm-add-acti').addEventListener('click',function() {
-    console.log($('.acti-st').value.replace('T',' ')) 
     var method = 'post';
     var nowUrl = url + 'act?token=' + sessionStorage.token;
     if($('#confirm-add-acti').getAttribute('change-type') === 'change') {
         method = 'put';
-        nowUrl = url + 'act/' + $('#confirm-add-acti').getAttribute('act-key');
+        nowUrl = url + 'act/' + $('#confirm-add-acti').getAttribute('act-key') + '?token=' + sessionStorage.token;
     }
         // console.log(JSON.stringify({
         //     token: sessionStorage.token,
@@ -224,7 +217,6 @@ $('#confirm-add-acti').addEventListener('click',function() {
         method: method,
         url: nowUrl,
         data: {
-            token: sessionStorage.token,
             activity_name: $('.acti-name').value,
             summary: $('.acti-summary').value,
             max_num: $('.max-num').value, //人数限制，若修改的值低于已报名的人数会返回错误
@@ -278,22 +270,19 @@ $('.message').addEventListener('click',() => {
             token: sessionStorage.token,
         },
         success: function(res) {
-            if(Object.prototype.toString.call(res) !== '[object Array]') {
+            if(Object.prototype.toString.call(res.data) !== '[object Array]') {
                 res.data = [res.data];
             }
             let tr = res.data.map((item) => {
-
-                return(`
-                    <tr admin-temp-id=${item.temp_id}>
+                return(`<tr admin-temp-id=${item.temp_id}>
                         <td>${item.temp_name}</td>
                         <td>${item.was_test}</td>
                         <td><button class="r-btn">删除</button></td>
                         <td><button class="x-btn">修改</button></td>
                         <td class="test"><button class="b-btn">测试</button></td>
-                    </tr>
-                `)
+                    </tr>`)
             })
-            $('.mess-tbody').innerHTML = tr;
+            $('.mess-tbody').innerHTML = tr.join('');
         }
     })
 })
@@ -379,17 +368,17 @@ $('#add-mess-finish').addEventListener('click',() => {
     } else if($('#add-mess-finish').getAttribute('change-type') === 'add') {
         ajax({
             method: 'post',
-            url: url + 'sms/?token=' + sessionStorage.token,
+            url: url + 'sms?token=' + sessionStorage.token,
+            type: 'form',
             data: {
                 admin_temp_id:  1,
                 temp_name: $('.add-mess-title').value,
                 'variables[name]': '${full_name}',
                 'variables[content]': 'lala',
                 'variables[next]': '13232131'
-    
             },
             success: function(res) {
-
+                console.log(res)
             },
             error: function(res) {
                 console.log(res)
@@ -398,3 +387,62 @@ $('#add-mess-finish').addEventListener('click',() => {
     }
 
 })
+
+
+
+
+//数据管理
+function dataNav() {
+    let promise = new Promise((resolve,reject) => {
+        ajax({
+            method: 'get',
+            url: url + 'act',
+            data: {
+                token: sessionStorage.token,
+                page: 1,
+                per_page: 100,
+                sortby: "start_time",
+                sort: "asc"
+            },
+            success: function(res) {
+                var s = res.data.data;
+                var inner = '';
+                if (res.data.data[0]) {
+                    resolve(res.data.data)
+                }
+            },
+            error: function(err) {
+                if (err.status == 400) {
+                    alert('请求错误，请重新登录');
+                    //请求错误，请重新登录
+                    //window.location.replace('./login.html');
+                }
+            }
+        })
+    }).then((value) => {
+        let inner = '';
+        let ul = '';
+        value.map((item,index) => { 
+            let li = document.createElement('li');
+            ajax({
+                method: 'get',
+                async: true,
+                url: url + 'act/' + item.activity_id,
+                data: {
+                    token: sessionStorage.token
+                },
+                success: function(res) {
+                    ul = '';
+                    inner = `<a href="#">${item.activity_name}</a><ul>`;
+                    res.data.flowList.map((ele,index) => {
+                        ul += `<li><a href="#" flow-id=${ele.flow_id}>${ele.flow_name}</a>`
+                    })
+                    li.innerHTML = inner + ul + '</ul></li>';
+                    $('.nav-data-second').appendChild(li)
+                }
+            })
+        })
+    })
+
+}
+dataNav()
