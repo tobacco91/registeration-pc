@@ -487,11 +487,11 @@ $('.nav-data-second').addEventListener('click',(e) => {
                     tr += `<tr enroll-id=${ele.enroll_id}>
                         <td class="check"><input type="checkbox"></td>
                         <td class="name">${ele.full_name}</td>
-                        <td class="department">产品</td>
-                        <td class="status">已报名</td>
+                        <td class="status">${ele.score}</td>
                         <td class="phone">${ele.contact}</td>
+                        <td class="mod mod-btn"><button class="x-btn">详情</button></td>
                         <td class="mod mod-btn"><button class="r-btn">修改</button></td>
-                        <td class="finish fin-btn"><button class="b-btn">移动</button></td>
+                        <td class="finish fin-btn"><button class="b-btn">移除</button></td>
                     </tr>`
                 })
                 $('.data-tbody').innerHTML = tr;
@@ -500,4 +500,33 @@ $('.nav-data-second').addEventListener('click',(e) => {
         })
     }
     
+})
+
+$('.data-tbody').addEventListener('click',(e) => {
+    let target = e.target;
+    let enrollId = target.parentNode.parentNode.getAttribute('enroll-id')
+    switch(target.className){
+        case 'x-btn': 
+            break;
+        case 'r-btn': 
+            break;
+        case 'b-btn': 
+            console.log(enrollId)
+            ajax({
+                method: 'delete',
+                url: url + 'applydata/'+ enrollId,
+                data: {
+                    token: sessionStorage.token,
+                },
+                success: function(res) {
+                    alert('移除成功');
+                }
+            })
+        
+            break;
+    }
+})
+$('#all').addEventListener('click',() => {
+    Array.prototype.slice.call($('.data-table input'))
+
 })
