@@ -203,16 +203,6 @@ $('#confirm-add-acti').addEventListener('click',function() {
         method = 'put';
         nowUrl = url + 'act/' + $('#confirm-add-acti').getAttribute('act-key') + '?token=' + sessionStorage.token;
     }
-        // console.log(JSON.stringify({
-        //     token: sessionStorage.token,
-        //     activity_name: $('.acti-name').value,
-        //     summary: $('.acti-summary').value,
-        //     max_num: $('.max-num').value, //人数限制，若修改的值低于已报名的人数会返回错误
-        //     location:$('.acti-location').value,
-        //     start_time: $('.acti-st').value.replace('T',' '),
-        //     end_time: $('.acti-et').value.replace('T',' '),
-        //     time_description: $('.time-des').value //以上数据可单个发送请求
-        // }))
      ajax({
         method: method,
         url: nowUrl,
@@ -249,8 +239,10 @@ function actiDelete(flow_id) {
         }
     })
 }
-
-
+//新增流程
+$('.add-flow').addEventListener('click',() => {
+    
+})
 
 
 
@@ -393,56 +385,119 @@ $('#add-mess-finish').addEventListener('click',() => {
 
 //数据管理
 function dataNav() {
-    let promise = new Promise((resolve,reject) => {
-        ajax({
-            method: 'get',
-            url: url + 'act',
-            data: {
-                token: sessionStorage.token,
-                page: 1,
-                per_page: 100,
-                sortby: "start_time",
-                sort: "asc"
-            },
-            success: function(res) {
-                var s = res.data.data;
-                var inner = '';
-                if (res.data.data[0]) {
-                    resolve(res.data.data)
-                }
-            },
-            error: function(err) {
-                if (err.status == 400) {
-                    alert('请求错误，请重新登录');
-                    //请求错误，请重新登录
-                    //window.location.replace('./login.html');
-                }
-            }
-        })
-    }).then((value) => {
-        let inner = '';
-        let ul = '';
-        value.map((item,index) => { 
-            let li = document.createElement('li');
-            ajax({
-                method: 'get',
-                async: true,
-                url: url + 'act/' + item.activity_id,
-                data: {
-                    token: sessionStorage.token
-                },
-                success: function(res) {
-                    ul = '';
-                    inner = `<a href="#">${item.activity_name}</a><ul>`;
-                    res.data.flowList.map((ele,index) => {
-                        ul += `<li><a href="#" flow-id=${ele.flow_id}>${ele.flow_name}</a>`
-                    })
-                    li.innerHTML = inner + ul + '</ul></li>';
-                    $('.nav-data-second').appendChild(li)
-                }
+    // let promise = new Promise((resolve,reject) => {
+    //     ajax({
+    //         method: 'get',
+    //         url: url + 'act',
+    //         data: {
+    //             token: sessionStorage.token,
+    //             page: 1,
+    //             per_page: 100,
+    //             sortby: "start_time",
+    //             sort: "asc"
+    //         },
+    //         success: function(res) {
+    //             var s = res.data.data;
+    //             var inner = '';
+    //             if (res.data.data[0]) {
+    //                 resolve(res.data.data)
+    //             }
+    //         },
+    //         error: function(err) {
+    //             if (err.status == 400) {
+    //                 alert('请求错误，请重新登录');
+    //                 //请求错误，请重新登录
+    //                 //window.location.replace('./login.html');
+    //             }
+    //         }
+    //     })
+    // }).then((value) => {
+    //     let inner = '';
+    //     let ul = '';
+    //     value.map((item,index) => { 
+    //         let li = document.createElement('li');
+    //         ajax({
+    //             method: 'get',
+    //             async: true,
+    //             url: url + 'act/' + item.activity_id,
+    //             data: {
+    //                 token: sessionStorage.token
+    //             },
+    //             success: function(res) {
+    //                 ul = '';
+    //                 inner = `<a href="#">${item.activity_name}</a><ul>`;
+    //                 res.data.flowList.map((ele,index) => {
+    //                     ul += `<li><a href="#" flow-id=${ele.flow_id}>${ele.flow_name}</a>`
+    //                 })
+    //                 li.innerHTML = inner + ul + '</ul></li>';
+    //                 $('.nav-data-second').appendChild(li)
+    //             }
+    //         })
+    //     })
+    // })
+    let ul = '';
+    ajax({
+        method: 'get',
+        url: url + 'act/flow',
+        data: {
+            token: sessionStorage.token
+        },
+        success: function(res) {
+            res.data.map((ele,index) => {
+                ul += `<li><a href="#">${ele.activity_name}</a><ul>`;
+                ele.flowlist.map((item,index) => {
+                    ul +=`<li><a href="#" class="data-choose" activity-id=${ele.activity_id} flow-id=${item.flow_id}>${item.flow_name}</a></li>`
+                })
+                ul += `</ul></li>`;
             })
-        })
+            $('.nav-data-second').innerHTML = ul;
+        }
     })
 
 }
 dataNav()
+
+
+
+//数据管理名单渲染          
+$('.nav-data-second').addEventListener('click',(e) => {
+    if(e.target.classList.contains('data-choose')) {
+
+        ajax({
+            method: 'get',
+            url: url + 'applydata',
+            data: {
+                token: sessionStorage.token,
+                act_key: e.target.getAttribute('activity-id'),
+                flow_id: e.target.getAttribute('flow-id'),
+                sortby: 'score',
+                sort: 'asc',
+                page: 1,
+                per_page: 20
+            },
+            success: function(res) {
+                if(lastcontentGroupClick !== $('.data')) {
+                    $('.data').style.display = 'block';
+                    lastcontentGroupClick.style.display = 'none';
+                    lastcontentGroupClick = $('.data');
+                }
+                let tr = '';
+                console.log(res.date.data)
+                res.date.data.map((ele,index) => {
+                    tr += `<tr enroll-id=${ele.enroll_id}>
+                        <td class="check"><input type="checkbox"></td>
+                        <td class="name">${ele.full_name}</td>
+                        <td class="department">产品</td>
+                        <td class="status">已报名</td>
+                        <td class="phone">${ele.contact}</td>
+                        <td class="mod mod-btn"><button class="r-btn">修改</button></td>
+                        <td class="finish fin-btn"><button class="b-btn">移动</button></td>
+                    </tr>`
+                })
+                $('.data-tbody').innerHTML = tr;
+            }
+
+        })
+    }
+    
+})
