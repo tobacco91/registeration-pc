@@ -1,5 +1,5 @@
 .edit {
-    /*display: block;*/
+    // display: block;
     display: none;
     position: absolute;
     top: 0;
@@ -18,7 +18,8 @@
 .edit-main,
 .test-main,
 .add-acco-main,
-.add-acti-main {
+.add-acti-main,
+.add-mess-main {
     position: absolute;
     margin: auto;
     top: 0;
@@ -35,6 +36,9 @@
 .add-acti-main {
     height: 560px;
 }
+.add-mess-main {
+    height: 350px;
+}
 .edit-main {
     display: none;
 }
@@ -48,7 +52,8 @@
 }
 .edit-main  p,
 .add-acco-main p,
-.add-acti-main p {
+.add-acti-main p,
+.add-mess-main p {
     margin: 20px 0;
     font-size: 16px;
 }
@@ -58,7 +63,8 @@
 .add-acco-main input,
 .add-acco-main select,
 .add-acti-main input,
-.add-acti-main textarea {
+.add-acti-main textarea,
+.add-mess-main input {
     padding: 0 8px;
     width: 214px;
     height: 34px;
@@ -77,9 +83,11 @@
 #edit-finish,
 #start-test,
 #acco-finish,
-#confirm-add-acti {
+#confirm-add-acti,
+#add-mess-finish {
     width: 90px;
     height: 40px;
+    line-height: 40px;
     border: 0;
     border-radius: 5px;
     background-color: #1abc9c;

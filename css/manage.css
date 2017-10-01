@@ -10,7 +10,7 @@ p,
 th,
 thead,
 tr,
-td{
+td {
     margin: 0;
     padding: 0;
 }
@@ -23,6 +23,7 @@ a{
     cursor: pointer;
 }
 button {
+    padding: 0;
     border: 0;
     outline: none;
 }
