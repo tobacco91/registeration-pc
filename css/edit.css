@@ -1,6 +1,6 @@
 .edit {
-    /*display: block;*/
-    display: none;
+    display: block;
+    // display: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -18,7 +18,12 @@
 .edit-main,
 .test-main,
 .add-acco-main,
-.add-acti-main {
+.add-acti-main,
+.add-mess-main,
+.add-flow-main,
+.add-user-main,
+.add-applydata-main,
+.show-applydata-main {
     position: absolute;
     margin: auto;
     top: 0;
@@ -32,8 +37,20 @@
     color: #fff;
     display: none;
 }
+.show-applydata-main {
+    display: block;
+}
 .add-acti-main {
     height: 560px;
+}
+.add-flow-main,
+.show-applydata-main {
+    height: 400px;
+}
+.add-mess-main,
+.add-user-main,
+.add-applydata-main {
+    height: 350px;
 }
 .edit-main {
     display: none;
@@ -48,9 +65,18 @@
 }
 .edit-main  p,
 .add-acco-main p,
-.add-acti-main p {
+.add-acti-main p,
+.add-mess-main p,
+.add-flow-main p,
+.add-user-main p,
+.add-applydata-main p {
     margin: 20px 0;
     font-size: 16px;
+}
+.show-applydata-main p {
+    margin: 10px 30px 10px 60px;
+    text-align: left;
+    font-size: 16px;  
 }
 .edit-main input,
 .edit-main select,
@@ -58,7 +84,13 @@
 .add-acco-main input,
 .add-acco-main select,
 .add-acti-main input,
-.add-acti-main textarea {
+.add-acti-main textarea,
+.add-mess-main input,
+.add-flow-main input,
+.add-flow-main select,
+.add-user-main input,
+.add-applydata-main input,
+.add-applydata-main textarea {
     padding: 0 8px;
     width: 214px;
     height: 34px;
@@ -70,6 +102,9 @@
     color: #fff;
     outline: none;
 }
+.add-flow-main select {
+    width: 230px;
+}
 .add-acti-main textarea {
     line-height: 24px;
     height: 70px;
@@ -77,9 +112,14 @@
 #edit-finish,
 #start-test,
 #acco-finish,
-#confirm-add-acti {
+#confirm-add-acti,
+#add-mess-finish,
+#confirm-add-flow,
+#confirm-add-user,
+#confirm-add-applydata {
     width: 90px;
     height: 40px;
+    line-height: 40px;
     border: 0;
     border-radius: 5px;
     background-color: #1abc9c;

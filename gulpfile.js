@@ -13,4 +13,6 @@ gulp.task('browser-sync', function () {
     });
     gulp.watch("./js/*.*").on('change', browserSync.reload);
     gulp.watch("*.html").on('change', browserSync.reload);
+    gulp.watch("./css/*.*").on('change', browserSync.reload);
 });
+gulp.task('auto', ['browser-sync']);
