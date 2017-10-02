@@ -52,7 +52,7 @@
             </ul>
         </div>
         <div class="message tabs">短信模板</div>
-        <div class="account tabs">账户管理</div>
+
         <div class="acti-manage tabs">活动管理</div>
     </div>
     <div class="edit content">
@@ -145,8 +145,9 @@
         <div class="add-user-main">
             <i class="iconfont icon-close"></i>
             <div>
-                <h3>添加用户？？？</h3>
+                <h3>添加学生</h3>
                 <p>姓名：<input type="text" class="user-name"></p>
+                <p>学号：<input type="text" class="user-code"></p>
                 <p>学院：<input type="text" class="user-college">
                 <p>手机：<input type="number" class="user-num"></p>
                 <button type="button" id="confirm-add-user">确定添加</button>
@@ -161,12 +162,12 @@
                 <p>分数：<input type="number" class="applydata-score">
                 </p>
                 <p>评价：<textarea class="applydata-eval"></textarea></p>
-                <button type="button" id="confirm-add-applydata">确定添加</button>
+                <button type="button" id="confirm-add-applydata">确定</button>
             </div> 
         </div><!--申请信息-->
         <div class="show-applydata-main">
             <i class="iconfont icon-close"></i>
-            <div>
+            <div class="show-applydata-main-mess">
                 <h3>申请信息详情</h3>
                 <p>活动名称：【招新】红岩网校WEB研发部</p>
                 <p>姓&emsp;&emsp;名：杜若</p>
@@ -184,13 +185,18 @@
         <div class="data content">
             <div class="data-title-message">
                 <p class="data-title">
-                    <span class="type">产品</span>-<span class="order">第一次面试</span>
+                    <!--<span class="type">产品</span>-->
+                    <span class="order">第一次面试</span>
                 </p>
-                <p class="data-total">
+                <!--<p class="data-total">
                     共有：<span class="number">77人</span>  
-                </p>
+                </p>-->
                 <button class="send b-btn">发信息</button>
-                <i class="iconfont icon-add1"></i>
+                <button class="sure b-btn">确认修改分数</button>
+                <button class="up b-btn">升级到下一流程</button>
+                <button class="export b-btn">导出Excel文件</button>
+                <button class="import b-btn">导入Excel文件</button>
+                <i class="iconfont icon-add1 icon-add-stu"></i>
             </div>
             <table class="data-table">
                 <thead>

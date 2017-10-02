@@ -1,6 +1,6 @@
 .edit {
-    display: block;
-    // display: none;
+    /*display: block;*/
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -38,7 +38,7 @@
     display: none;
 }
 .show-applydata-main {
-    display: block;
+    display: none;
 }
 .add-acti-main {
     height: 560px;

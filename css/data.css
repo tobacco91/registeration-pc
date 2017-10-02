@@ -4,7 +4,7 @@
 }
 .data-title-message {
     padding-left: 80px;
-    width: 944px;
+    /*width: 944px;*/
     height: 60px;
     line-height: 60px;
     background-color: #33a09a;
@@ -18,9 +18,9 @@
 .order {
     padding-right: 400px;
 }
-.send {
+/*.send {
     margin-right: 50px;
-}
+}*/
 .number {
     padding-right: 100px;
 }

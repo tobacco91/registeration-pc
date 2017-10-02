@@ -1,4 +1,4 @@
-var url = 'http://hongyan.cqupt.edu.cn/activity/api/',
+var url = 'http://wx.idsbllp.cn/activity/api/',
     lastcontentGroupClick = $('.acti');
     console.log(sessionStorage.token)
 function $(ele) {
@@ -49,7 +49,11 @@ function ajax(conf) {
     }
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && successInfo.test(xhr.status)) {
-            success(JSON.parse(xhr.responseText));
+            if(xhr.responseText != '') {
+                success(JSON.parse(xhr.responseText));
+            } else {
+                success(xhr.responseText);
+            }
         } else if (xhr.readyState === 4 && errorInfo.test(xhr.status)) {
             console.log(xhr.status)
             if(error !== undefined) {
@@ -71,16 +75,7 @@ function openEdit(ele) {
     $('.edit').style.display = 'block';
     ele.style.display = 'block';
 }
-// ajax({
-//     method: 'put',
-//     url: url + 'act/1000',
-//     data: {
-//         token: sessionStorage.token
-//     },
-//     success: function(res) {
-//         console.log(res)
-//     }
-// })
+
 //显示活动
 $('.acti-manage').addEventListener('click',function() {
     $('.acti').style.display = 'block';
@@ -248,6 +243,7 @@ $('.add-flow').addEventListener('click',() => {
 
 
 //短信模板
+
 //显示短信模板
 $('.message').addEventListener('click',() => {
     if(lastcontentGroupClick !== $('.mess')) {
@@ -305,7 +301,7 @@ $('.mess-tbody').addEventListener('click',(e) => {
         openEdit($('.test-main'));
         $('#start-test').setAttribute('admin-temp-id',e.target.parentNode.parentNode.getAttribute('admin-temp-id'));
     }else if(e.target.classList.contains('x-btn')) {
-        $('.add-mess-p').style.display = 'none';
+        // $('.add-mess-p').style.display = 'none';
         openEdit($('.add-mess-main'));
         $('#add-mess-finish').setAttribute('change-type','change');
         $('#add-mess-finish').setAttribute('admin-temp-id',e.target.parentNode.parentNode.getAttribute('admin-temp-id'));
@@ -321,7 +317,7 @@ $('#start-test').addEventListener('click',() => {
   	        temp_id: parseInt($('#start-test').getAttribute('admin-temp-id'))
         },
         success: function(res) {
-            console.log(res)
+            console.log(res.message)
         }
     })
 })
@@ -329,7 +325,7 @@ $('#start-test').addEventListener('click',() => {
 $('.add-var').addEventListener('click',() => {
     openEdit($('.add-mess-main'));
     let p = document.createElement('p');
-    $('.add-mess-p').style.display = 'block';
+    // $('.add-mess-p').style.display = 'block';
     $('#add-mess-finish').setAttribute('change-type','add');
 
 })
@@ -343,7 +339,7 @@ $('#add-mess-finish').addEventListener('click',() => {
             method: 'put',
             url: url + 'sms/'+ $('#add-mess-finish').getAttribute('admin-temp-id') + '?token=' + sessionStorage.token,
             data: {
-                admin_temp_id:  $('#add-mess-finish').getAttribute('admin-temp-id'),
+                admin_temp_id:  1,
                 temp_name: $('.add-mess-title').value,
                 'variables[name]': '${full_name}',
                 'variables[content]': 'lala',
@@ -351,7 +347,7 @@ $('#add-mess-finish').addEventListener('click',() => {
     
             },
             success: function(res) {
-                console.log(res)
+                console.log('修改成功')
             },
             error: function(res) {
                 console.log(res)
@@ -360,17 +356,17 @@ $('#add-mess-finish').addEventListener('click',() => {
     } else if($('#add-mess-finish').getAttribute('change-type') === 'add') {
         ajax({
             method: 'post',
-            url: url + 'sms?token=' + sessionStorage.token,
+            url: url + 'sms/?token=' + sessionStorage.token,
             type: 'form',
             data: {
-                admin_temp_id:  1,
+                admin_temp_id: 1,
                 temp_name: $('.add-mess-title').value,
                 'variables[name]': '${full_name}',
-                'variables[content]': 'lala',
-                'variables[next]': '13232131'
+                'variables[content]': $('.add-mess-content').value,
+                'variables[next]': $('.add-mess-date').value
             },
             success: function(res) {
-                console.log(res)
+                alert('添加成功');
             },
             error: function(res) {
                 console.log(res)
@@ -383,58 +379,14 @@ $('#add-mess-finish').addEventListener('click',() => {
 
 
 
+
+
+
+
+
 //数据管理
+//渲染nav
 function dataNav() {
-    // let promise = new Promise((resolve,reject) => {
-    //     ajax({
-    //         method: 'get',
-    //         url: url + 'act',
-    //         data: {
-    //             token: sessionStorage.token,
-    //             page: 1,
-    //             per_page: 100,
-    //             sortby: "start_time",
-    //             sort: "asc"
-    //         },
-    //         success: function(res) {
-    //             var s = res.data.data;
-    //             var inner = '';
-    //             if (res.data.data[0]) {
-    //                 resolve(res.data.data)
-    //             }
-    //         },
-    //         error: function(err) {
-    //             if (err.status == 400) {
-    //                 alert('请求错误，请重新登录');
-    //                 //请求错误，请重新登录
-    //                 //window.location.replace('./login.html');
-    //             }
-    //         }
-    //     })
-    // }).then((value) => {
-    //     let inner = '';
-    //     let ul = '';
-    //     value.map((item,index) => { 
-    //         let li = document.createElement('li');
-    //         ajax({
-    //             method: 'get',
-    //             async: true,
-    //             url: url + 'act/' + item.activity_id,
-    //             data: {
-    //                 token: sessionStorage.token
-    //             },
-    //             success: function(res) {
-    //                 ul = '';
-    //                 inner = `<a href="#">${item.activity_name}</a><ul>`;
-    //                 res.data.flowList.map((ele,index) => {
-    //                     ul += `<li><a href="#" flow-id=${ele.flow_id}>${ele.flow_name}</a>`
-    //                 })
-    //                 li.innerHTML = inner + ul + '</ul></li>';
-    //                 $('.nav-data-second').appendChild(li)
-    //             }
-    //         })
-    //     })
-    // })
     let ul = '';
     ajax({
         method: 'get',
@@ -443,10 +395,11 @@ function dataNav() {
             token: sessionStorage.token
         },
         success: function(res) {
+           // console.log(res)
             res.data.map((ele,index) => {
                 ul += `<li><a href="#">${ele.activity_name}</a><ul>`;
                 ele.flowlist.map((item,index) => {
-                    ul +=`<li><a href="#" class="data-choose" activity-id=${ele.activity_id} flow-id=${item.flow_id}>${item.flow_name}</a></li>`
+                    ul +=`<li><a href="#" class="data-choose" activity-id=${ele.activity_id} flow-id=${item.flow_id} li-title=${ele.activity_name+"-"+item.flow_name}>${item.flow_name}</a></li>`
                 })
                 ul += `</ul></li>`;
             })
@@ -457,61 +410,99 @@ function dataNav() {
 }
 dataNav()
 
-
-
-//数据管理名单渲染          
-$('.nav-data-second').addEventListener('click',(e) => {
-    if(e.target.classList.contains('data-choose')) {
-
+//数据管理名单渲染  
+let state = {};    
+state.args = {}; 
+Object.defineProperty(state,'dataShow',{
+    enumerable: true,
+    set:function(res) {
+        //console.log(res)
+        if(lastcontentGroupClick !== $('.data')) {
+            $('.data').style.display = 'block';
+            lastcontentGroupClick.style.display = 'none';
+            lastcontentGroupClick = $('.data');
+        }
+        let tr = '';
+        res.date.data.map((ele,index) => {
+            tr += `<tr enroll-id=${ele.enroll_id} >
+                <td class="check"><input type="checkbox"></td>
+                <td class="name">${ele.full_name}</td>
+                <td class="status"><input type="number" class="data-input-socre" value=${ele.score === null ? 0 : ele.score} onblur="pushScore({enroll_id:${ele.enroll_id},score:parseInt(this.value)})"/></td>
+                <td class="phone">${ele.contact}</td>
+                <td class="mod mod-btn"><button class="x-btn">详情</button></td>
+                <td class="mod mod-btn"><button class="r-btn">修改</button></td>
+                <td class="finish fin-btn"><button class="b-btn">移除</button></td>
+            </tr>`
+        })
+        $('.data-tbody').innerHTML = tr;
+    },
+    get: function() {
         ajax({
             method: 'get',
             url: url + 'applydata',
             data: {
                 token: sessionStorage.token,
-                act_key: e.target.getAttribute('activity-id'),
-                flow_id: e.target.getAttribute('flow-id'),
+                act_key: state.args.dataShow.actKey,
+                flow_id: state.args.dataShow.flowId,
                 sortby: 'score',
                 sort: 'asc',
                 page: 1,
                 per_page: 20
             },
             success: function(res) {
-                if(lastcontentGroupClick !== $('.data')) {
-                    $('.data').style.display = 'block';
-                    lastcontentGroupClick.style.display = 'none';
-                    lastcontentGroupClick = $('.data');
-                }
-                let tr = '';
-                console.log(res.date.data)
-                res.date.data.map((ele,index) => {
-                    tr += `<tr enroll-id=${ele.enroll_id}>
-                        <td class="check"><input type="checkbox"></td>
-                        <td class="name">${ele.full_name}</td>
-                        <td class="status">${ele.score}</td>
-                        <td class="phone">${ele.contact}</td>
-                        <td class="mod mod-btn"><button class="x-btn">详情</button></td>
-                        <td class="mod mod-btn"><button class="r-btn">修改</button></td>
-                        <td class="finish fin-btn"><button class="b-btn">移除</button></td>
-                    </tr>`
-                })
-                $('.data-tbody').innerHTML = tr;
+                state.dataShow = res;
             }
 
         })
     }
-    
 })
 
+//点击nav   
+$('.nav-data-second').addEventListener('click',(e) => {
+    if(e.target.classList.contains('data-choose')) {
+        $('.order').innerText = e.target.getAttribute('li-title');
+        state.args.dataShow = {
+                actKey: e.target.getAttribute('activity-id'),
+                flowId: e.target.getAttribute('flow-id'),
+        };
+        state.dataShow; 
+    }
+    
+})
+//三个按钮选择
 $('.data-tbody').addEventListener('click',(e) => {
     let target = e.target;
     let enrollId = target.parentNode.parentNode.getAttribute('enroll-id')
     switch(target.className){
         case 'x-btn': 
+            openEdit($('.show-applydata-main'));
+            ajax({
+                method:'get',
+                url: url + 'applydata/' + enrollId,
+                data: {
+                    token: sessionStorage.token,
+                },
+                success: function(res) {
+                    let inner  = `<h3>申请信息详情</h3>
+                <p>${res.data.act_name}</p>
+                <p>姓&emsp;&emsp;名：${res.data.full_name}</p>
+                <p>学&emsp;&emsp;号：${res.data.stu_code}</p>
+                <p>联系方式：${res.data.contact}</p>
+                <p>性&emsp;&emsp;别：${res.data.gender}</p>
+                <p>年&emsp;&emsp;级：${res.data.grade}</p>
+                <p>分&emsp;&emsp;数：${res.data.score === null ? '还没分数' : res.data.score}</p>
+                <p>评&emsp;&emsp;价：${res.data.evaluation === null ? '还没评价' : res.data.evaluation}</p>
+                <p>发送短信：${res.data.was_send_sms == 0 ? '没发送' : '已发送'}</p>`
+                $('.show-applydata-main-mess').innerHTML = inner;
+                    console.log(res)
+                }
+            })
             break;
         case 'r-btn': 
+            openEdit($('.add-applydata-main'));
+            $('#confirm-add-applydata').setAttribute('enroll-id',enrollId);
             break;
         case 'b-btn': 
-            console.log(enrollId)
             ajax({
                 method: 'delete',
                 url: url + 'applydata/'+ enrollId,
@@ -520,13 +511,132 @@ $('.data-tbody').addEventListener('click',(e) => {
                 },
                 success: function(res) {
                     alert('移除成功');
+                    state.dataShow;
+                },
+                error: function(res) {
+                    console.log(res)
                 }
             })
         
             break;
     }
 })
-$('#all').addEventListener('click',() => {
-    Array.prototype.slice.call($('.data-table input'))
 
+//分数修改
+let dataScore = [];
+function pushScore(score) {
+    dataScore.push(score);
+    let act = state.args.dataShow.actKey;
+    let flow = state.args.dataShow.flowId;
+    console.log(flow,act)
+}
+
+//全选
+let checkInfo = false;
+$('#all').addEventListener('click',() => {
+        Array.prototype.slice.call($('.data-table input')).forEach(function(element) {
+            element.checked = !checkInfo;
+        });
+        checkInfo = !checkInfo;
+})
+
+//新增学生窗口
+$('.icon-add-stu').addEventListener('click',() => {
+    openEdit($('.add-user-main'));
+})
+
+//新增学生
+$('#confirm-add-user').addEventListener('click',() => {
+    ajax({
+        method: 'post',
+        url : url+'applydata?token=' +  sessionStorage.token,
+        data: {
+            act_key: state.args.dataShow.actKey,
+            flow_id:  state.args.dataShow.flowId,
+            college: $('.user-college').value,
+            stu_code: $('.user-code').value,
+            full_name: $('.user-name').value,
+            contact: $('.user-num').value
+        },
+        success: function(res) {
+            alert(res.message)
+            state.dataShow;
+        },
+        error: function(res) {
+            alert(res.message)
+        }
+    })
+})
+
+//修改学生信息
+$('#confirm-add-applydata').addEventListener('click',()=> {
+    ajax({
+        method: 'put',
+        url: url + 'applydata/' + $('#confirm-add-applydata').getAttribute('enroll-id') + '?token=' + sessionStorage.token,
+        data: {
+             act_key: state.args.dataShow.actKey,
+             flow_id:  state.args.dataShow.flowId,
+             college: $('.applydata-college').value,
+             score: $('.applydata-score').value,
+             evaluation: $('.applydata-eval').value,
+             contact: $('.applydata-num').value
+        },
+        success: function(res) {
+            console.log(res)
+            alart(res.message)
+        }
+    })
+})
+//升级到下一个流程
+$('.up').addEventListener('click',() => {
+    let checked = [].slice.call($('.check input'))
+    .map((ele,index) => {
+        if(ele.checked === true && ele.getAttribute('id') !== 'all') {
+            //console.log(ele)
+            return ele.parentNode.parentNode.getAttribute('enroll-id');
+        }
+    })
+    ajax({
+        method: 'post',
+        url: url + 'applydata/operation?token=' + sessionStorage.token,
+        data: {
+            enroll_id: checked.join(','),
+            flow_id: state.args.dataShow.flowId,
+            action: 'up'
+        },
+        success: function(res) {
+            alert(res.message)
+            console.log(res)
+        },
+        error: function(res) {
+            alert(res.message)
+            //console.log(res)
+        }
+    })
+})
+//发送短信 
+$('.send').addEventListener('click',() => {
+     let checked = [].slice.call($('.check input'))
+    .map((ele,index) => {
+        if(ele.checked === true && ele.getAttribute('id') !== 'all') {
+            //console.log(ele)
+            return ele.parentNode.parentNode.getAttribute('enroll-id');
+        }
+    })
+    ajax({
+        method: 'post',
+        url: url + 'applydata/sendsms?token=' + sessionStorage.token,
+        data: {
+            enroll_id: checked.join(','),
+            flow_id: state.args.dataShow.flowId
+        },
+        success: function(res) {
+            alert(res.message)
+            console.log(res)
+        },
+        error: function(res) {
+            alert(res.message)
+            //console.log(res)
+        }
+    })
 })
