@@ -52,8 +52,8 @@
             </ul>
         </div>
         <div class="message tabs">短信模板</div>
-
         <div class="acti-manage tabs">活动管理</div>
+        <div class="recharge tabs">充值</div>
     </div>
     <div class="edit content">
         <div class="edit-main">
@@ -80,6 +80,16 @@
             <div><input type="text" class="test-phone"></div>
             <button type="button" id="start-test">开始测试</button>
         </div><!--测试按钮红色的那个-->
+        <div class="show-mess-main">
+            <i class="iconfont icon-close"></i>
+            <div class="show-mess-main-mess">
+                <h3>短信模板详情</h3>
+                <p>短信模板：</p>
+                <p>name:默认所有报名的同学各自的姓名</p>
+                <p>content：2015210111</p>
+                <p>next：</p>
+            </div> 
+        </div><!--短信模板详情-->
         <div class="add-mess-main">
             <i class="iconfont icon-close"></i>
             <div>
@@ -88,11 +98,11 @@
                 <p>内容<input type="text" class="add-mess-content"></p>
                 <p>时间地点<input type="text" class="add-mess-date"></p>-->
                 <!--<p class="add-mess-p">模板序号：<input type="text" class="add-mess-id"></p>-->
-                <h3>新增模板</h3>
+                <h3>模板</h3>
                 <p>模板名称：<input type="text" class="add-mess-title"></p>
                 <p>添加内容：<input type="text" class="add-mess-content"></p>
                 <p>时间地点：<input type="text" class="add-mess-date"></p>
-                <p class="add-mess-p">模板序号：<input type="text" class="add-mess-id"></p>
+                <!--<p class="add-mess-p">模板序号：<input type="text" class="add-mess-id"></p>-->
                 <button type="button" id="add-mess-finish">完成</button>
             </div>
         </div><!--新增一个短信模版-->
@@ -124,20 +134,35 @@
                 <button type="button" id="confirm-add-acti">确定添加</button>
             </form> 
         </div><!--添加活动-->
+        <div class="show-flow-main">
+            <i class="iconfont icon-close"></i>
+            <div class="show-flow-main-mess">
+                <h3>流程详情</h3>
+                <p>流程名：</p>
+                <p>地点：</p>
+                <p>报名方式：</p>
+                <p>时间：</p>
+                <p>短信详情：</p>
+            </div> 
+        </div><!--流程详情-->
         <div class="add-flow-main">
             <i class="iconfont icon-close"></i>
             <div>
-                <h3>新增流程</h3>
+                <h3>流程</h3>
                 <p>流程名称：<input type="text" class="flow-name"></p>
                 <p>流程地点：<input type="text" class="flow-location">
                 <p>流程类型：
-                    <select>
-                        <option value="">报名</option>
-                        <option value="">面试</option>
-                        <option value="">笔试</option>
+                    <select class="flow-select">
+                        <option value="0">报名</option>
+                        <option value="1">面试</option>
+                        <option value="2">笔试</option>
                     </select>
                 </p>
-                <p>短信模板：<input class="flow-et"></p>
+                <p>短信模板：
+                    <select class="flow-mess">
+                        
+                    </select>
+                </p>
                 <p>时间描述：<input type="text" class="flow-time-des"></p>
                 <button type="button" id="confirm-add-flow">确定添加</button>
             </div> 
@@ -179,7 +204,13 @@
                 <p>评&emsp;&emsp;价：好哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p>
                 <p>发送短信：已发送</p>
             </div> 
-        </div><!--显示申请信息详情-->   
+        </div><!--显示申请信息详情-->  
+        <div class="recharge-main">
+            <i class="iconfont icon-close"></i>
+            <h3>请输入你要充值的短信条数：</h3>
+            <div><input type="text" class="sms-num"></div>
+            <button type="button" id="recharge-test">充值</button>
+        </div><!--短信充值--> 
     </div><!-- end edit -->
     <div class="content-group">
         <div class="data content">
@@ -337,6 +368,5 @@
         </div><!-- end acti-details -->
     </div>
 </body>
-<script src="js/vue.js"></script>
-<script src="js/manage.js"></script>
+<script src="js/manage/index.js"></script>
 </html>
