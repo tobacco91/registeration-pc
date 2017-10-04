@@ -262,6 +262,7 @@
                     </tr>
                 </tbody>
             </table>
+            <ul class="page"></ul>
         </div><!-- 点击数据管理 -->
         <div class="mess content">
             <div class="mess-title">
@@ -275,14 +276,14 @@
             <div class="create g-btn">创建新模板</div>
         </div><!-- end mess -->
         <div class="template content">
-            <select>
+            <!--<select>
                 <option selected="selected" disabled="disabled"  style='display: none' value=''>请选择原始模板</option> 
                 <option>产品招新</option>
                 <option>视觉招新</option>
                 <option>WEB招新</option>
                 <option>移动招新</option>
                 <option>SRE招新</option>
-            </select>
+            </select>-->
             <div class="templet-model">
                 
             </div>
@@ -347,7 +348,7 @@
             <h3>工作日上午10点到晚上7点</h3>
             <h3>欢迎来到互联网的世界，大家一起学习进步，走上人生巅峰</h3>
             <span class="add-acti add-flow"><i class="iconfont icon-add1">增加新流程</i></span>
-            <div class="acti-details-interview">
+            <div class="acti-details-interview"> 
                 <div class="interview">
                     <div class="fir-inter">1.第一次面试</div>
                     <span class="s-btn acti-start">开始</span>
@@ -364,7 +365,10 @@
                 </div>
                 
             </div>
-
+            <form style="display: none;" class="import_form" method="post" action="" enctype="multipart/form-data">
+                <input type="file" class="add-in-file">
+                <input type="submit">
+            </form>
         </div><!-- end acti-details -->
     </div>
 </body>

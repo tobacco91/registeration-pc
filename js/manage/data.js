@@ -34,6 +34,7 @@ $('.nav-data-second').addEventListener('click',(e) => {
         state.args.dataShow = {
                 actKey: e.target.getAttribute('activity-id'),
                 flowId: e.target.getAttribute('flow-id'),
+                pageNum: 1
         };
         state.dataShow; 
     }
@@ -210,5 +211,57 @@ $('.send').addEventListener('click',() => {
         }
     })
 })
+//excel导入
+let file = $('.import_form').children[0],
+    check_upload = false;
+$('.import').addEventListener('click',() => {
+    console.log('flie')
+    file.click();
+})
+file.addEventListener('change',() => {
+    chooseFile();
+    uploadFile();
+})
 
+function chooseFile() {
+    let test_last = /\.xls$|xlsx$/i,
+        fileValue = file.value;
+    if(test_last.test(fileValue)) {
+        check_upload = true;
+    }else {
+        window.alert('只能是excel文件');
+        return;
+    }
+}
 
+function uploadFile() {
+    if(!check_upload) return;
+    let formData = new FormData();
+    formData.append('excel',file.files[0]);
+    formData.append('flow_id',state.args.dataShow.flowId);
+    ajax({
+        method: 'post',
+        url: url + 'applydata/excel?token=' + sessionStorage.token,
+        type: 'file',
+        data: formData,
+        success: function(res) {
+            alert(res.message);
+            state.dataShow;
+        },
+        error: function(res) {
+            console.log(res)
+        }
+    })
+}
+
+//导出excel
+$('.export').addEventListener('click',()=>{
+    window.location.href = `${url}applydata/excel?token=${sessionStorage.token}&act_key=${state.args.dataShow.actKey}&flow_id=${state.args.dataShow.flowId}&sortby=grade&sort=asc`;
+})
+//分页
+$('.page').addEventListener('click',(e) => {
+    if(e.target.classList.contains('page-num')) {
+        state.args.dataShow.pageNum = e.target.innerText;
+        state.dataShow;
+    }
+})

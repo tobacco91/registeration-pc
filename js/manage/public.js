@@ -39,6 +39,8 @@ function ajax(conf) {
             }
             xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
             xhr.send(urlData.substring(0,urlData.length-1));
+        } else {
+            xhr.send(data);
         }
     } else if (method.toLowerCase() === 'put') {
             for(var key in data) {
@@ -81,6 +83,7 @@ function openEdit(ele) {
 let state = {};    
 state.args = {}; 
 Object.defineProperties(state,{
+    //数据名单
     dataShow: {
         enumerable: true,
         set:function(res) {
@@ -102,7 +105,17 @@ Object.defineProperties(state,{
                     <td class="finish fin-btn"><button class="b-btn">移除</button></td>
                 </tr>`
             })
+            let page = '';
+            let pageClick = 'page-click';
+            let pageLast = 'page-num';
+            console.log(state.args.dataShow.pageNum)
+            for(let i = 1; i <= res.date.last_page; i ++) {
+                page +=`<li class=${i == state.args.dataShow.pageNum ? pageClick : pageLast}>${i}</li>`;
+            }
+            //console.log(page)
+            $('.page').innerHTML = page;
             $('.data-tbody').innerHTML = tr;
+
         },
         get: function() {
             ajax({
@@ -114,8 +127,8 @@ Object.defineProperties(state,{
                     flow_id: state.args.dataShow.flowId,
                     sortby: 'score',
                     sort: 'asc',
-                    page: 1,
-                    per_page: 20
+                    page: state.args.dataShow.pageNum,
+                    per_page: 2
                 },
                 success: function(res) {
                     state.dataShow = res;
@@ -159,8 +172,82 @@ Object.defineProperties(state,{
                 }
             }) 
         }
-    }
+    },
+    //活动显示
+    actiShow: {
+        set: function(res){
+            var inner = '';
+            if (res.data.data[0]) {
+                res.data.data.map(function(ele,inedex) {
+                    inner += `<div class="activities" activity_id=${ele.activity_id}>
+                    <div class="acti-title" onClick="showDetail(${ele.activity_id})"><a>${ele.activity_name}</a></div>
+                    <span class="s-btn acti-start">开始</span>
+                    <span class="r-btn acti-modi">修改</span>
+                    <span class="b-btn acti-dele">关闭</span>
+                </div>`;
+            })
+            $('.acti-main').innerHTML = inner;
+            } else {
 
+            }
+        },
+        get: function() {
+            ajax({
+                method: 'get',
+                url: url + 'act',
+                data: {
+                    token: sessionStorage.token,
+                    page: 1,
+                    per_page: 100,
+                    sortby: "start_time",
+                    sort: "asc"
+                    //act_key: 1000, //以下将进行模糊查询
+                    // act_name: "招新"
+                },
+                success: function(res) {
+                    state.actiShow = res;
+                },
+                error: function(err) {
+                    if (err.status == 400) {
+                        console.log(1);
+                        alert('请求错误，请重新登录');
+                        //请求错误，请重新登录
+                        //window.location.replace('./login.html');
+                    }
+                }
+            })
+        }
+    },
+    //短信显示
+    messShow: {
+        set: function(res) {
+            if(Object.prototype.toString.call(res.data) !== '[object Array]') {
+                res.data = [res.data];
+            }
+            let tr = res.data.map((item) => {
+                return(`<tr admin-temp-id=${item.temp_id}>
+                        <td>${item.temp_name}</td>
+                        <td>${item.was_test === 0 ? '未测试' : '已测试'}</td>
+                        <td><button class="x-btn">修改</button></td>
+                        <td><button class="r-btn">详情</button></td>
+                        <td class="test"><button class="b-btn">测试</button></td>
+                    </tr>`)
+            })
+            $('.mess-tbody').innerHTML = tr.join('');
+        },
+        get: function() {
+            ajax({
+                method: 'get',
+                url: url + 'sms/',
+                data: {
+                    token: sessionStorage.token,
+                },
+                success: function(res) {
+                    state.messShow = res;
+                }
+            })
+        }
+    }
 })
 
 

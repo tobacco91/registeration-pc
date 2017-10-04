@@ -6,44 +6,7 @@ $('.acti-manage').addEventListener('click',function() {
         lastcontentGroupClick.style.display = 'none';
         lastcontentGroupClick = $('.acti');
     }
-    ajax({
-        method: 'get',
-        url: url + 'act',
-        data: {
-            token: sessionStorage.token,
-            page: 1,
-            per_page: 100,
-            sortby: "start_time",
-            sort: "asc"
-            //act_key: 1000, //以下将进行模糊查询
-            // act_name: "招新"
-        },
-        success: function(res) {
-            var s = res.data.data;
-            var inner = '';
-            if (res.data.data[0]) {
-                res.data.data.map(function(ele,inedex) {
-                    inner += `<div class="activities" activity_id=${ele.activity_id}>
-                    <div class="acti-title" onClick="showDetail(${ele.activity_id})"><a>${ele.activity_name}</a></div>
-                    <span class="s-btn acti-start">开始</span>
-                    <span class="r-btn acti-modi">修改</span>
-                    <span class="b-btn acti-dele">关闭</span>
-                </div>`;
-            })
-            $('.acti-main').innerHTML = inner;
-            } else {
-
-            }
-        },
-        error: function(err) {
-            if (err.status == 400) {
-                console.log(1);
-                alert('请求错误，请重新登录');
-                //请求错误，请重新登录
-                //window.location.replace('./login.html');
-            }
-        }
-    })
+    state.actiShow;
 })
 //显示流程
 function showDetail(act_key) {

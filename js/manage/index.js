@@ -39,6 +39,8 @@ function ajax(conf) {
             }
             xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
             xhr.send(urlData.substring(0,urlData.length-1));
+        } else {
+            xhr.send(data);
         }
     } else if (method.toLowerCase() === 'put') {
             for(var key in data) {
@@ -81,6 +83,7 @@ function openEdit(ele) {
 let state = {};    
 state.args = {}; 
 Object.defineProperties(state,{
+    //数据名单
     dataShow: {
         enumerable: true,
         set:function(res) {
@@ -102,7 +105,17 @@ Object.defineProperties(state,{
                     <td class="finish fin-btn"><button class="b-btn">移除</button></td>
                 </tr>`
             })
+            let page = '';
+            let pageClick = 'page-click';
+            let pageLast = 'page-num';
+            console.log(state.args.dataShow.pageNum)
+            for(let i = 1; i <= res.date.last_page; i ++) {
+                page +=`<li class=${i == state.args.dataShow.pageNum ? pageClick : pageLast}>${i}</li>`;
+            }
+            //console.log(page)
+            $('.page').innerHTML = page;
             $('.data-tbody').innerHTML = tr;
+
         },
         get: function() {
             ajax({
@@ -114,8 +127,8 @@ Object.defineProperties(state,{
                     flow_id: state.args.dataShow.flowId,
                     sortby: 'score',
                     sort: 'asc',
-                    page: 1,
-                    per_page: 20
+                    page: state.args.dataShow.pageNum,
+                    per_page: 2
                 },
                 success: function(res) {
                     state.dataShow = res;
@@ -159,8 +172,82 @@ Object.defineProperties(state,{
                 }
             }) 
         }
-    }
+    },
+    //活动显示
+    actiShow: {
+        set: function(res){
+            var inner = '';
+            if (res.data.data[0]) {
+                res.data.data.map(function(ele,inedex) {
+                    inner += `<div class="activities" activity_id=${ele.activity_id}>
+                    <div class="acti-title" onClick="showDetail(${ele.activity_id})"><a>${ele.activity_name}</a></div>
+                    <span class="s-btn acti-start">开始</span>
+                    <span class="r-btn acti-modi">修改</span>
+                    <span class="b-btn acti-dele">关闭</span>
+                </div>`;
+            })
+            $('.acti-main').innerHTML = inner;
+            } else {
 
+            }
+        },
+        get: function() {
+            ajax({
+                method: 'get',
+                url: url + 'act',
+                data: {
+                    token: sessionStorage.token,
+                    page: 1,
+                    per_page: 100,
+                    sortby: "start_time",
+                    sort: "asc"
+                    //act_key: 1000, //以下将进行模糊查询
+                    // act_name: "招新"
+                },
+                success: function(res) {
+                    state.actiShow = res;
+                },
+                error: function(err) {
+                    if (err.status == 400) {
+                        console.log(1);
+                        alert('请求错误，请重新登录');
+                        //请求错误，请重新登录
+                        //window.location.replace('./login.html');
+                    }
+                }
+            })
+        }
+    },
+    //短信显示
+    messShow: {
+        set: function(res) {
+            if(Object.prototype.toString.call(res.data) !== '[object Array]') {
+                res.data = [res.data];
+            }
+            let tr = res.data.map((item) => {
+                return(`<tr admin-temp-id=${item.temp_id}>
+                        <td>${item.temp_name}</td>
+                        <td>${item.was_test === 0 ? '未测试' : '已测试'}</td>
+                        <td><button class="x-btn">修改</button></td>
+                        <td><button class="r-btn">详情</button></td>
+                        <td class="test"><button class="b-btn">测试</button></td>
+                    </tr>`)
+            })
+            $('.mess-tbody').innerHTML = tr.join('');
+        },
+        get: function() {
+            ajax({
+                method: 'get',
+                url: url + 'sms/',
+                data: {
+                    token: sessionStorage.token,
+                },
+                success: function(res) {
+                    state.messShow = res;
+                }
+            })
+        }
+    }
 })
 
 
@@ -193,44 +280,7 @@ $('.acti-manage').addEventListener('click',function() {
         lastcontentGroupClick.style.display = 'none';
         lastcontentGroupClick = $('.acti');
     }
-    ajax({
-        method: 'get',
-        url: url + 'act',
-        data: {
-            token: sessionStorage.token,
-            page: 1,
-            per_page: 100,
-            sortby: "start_time",
-            sort: "asc"
-            //act_key: 1000, //以下将进行模糊查询
-            // act_name: "招新"
-        },
-        success: function(res) {
-            var s = res.data.data;
-            var inner = '';
-            if (res.data.data[0]) {
-                res.data.data.map(function(ele,inedex) {
-                    inner += `<div class="activities" activity_id=${ele.activity_id}>
-                    <div class="acti-title" onClick="showDetail(${ele.activity_id})"><a>${ele.activity_name}</a></div>
-                    <span class="s-btn acti-start">开始</span>
-                    <span class="r-btn acti-modi">修改</span>
-                    <span class="b-btn acti-dele">关闭</span>
-                </div>`;
-            })
-            $('.acti-main').innerHTML = inner;
-            } else {
-
-            }
-        },
-        error: function(err) {
-            if (err.status == 400) {
-                console.log(1);
-                alert('请求错误，请重新登录');
-                //请求错误，请重新登录
-                //window.location.replace('./login.html');
-            }
-        }
-    })
+    state.actiShow;
 })
 //显示流程
 function showDetail(act_key) {
@@ -448,6 +498,7 @@ $('.nav-data-second').addEventListener('click',(e) => {
         state.args.dataShow = {
                 actKey: e.target.getAttribute('activity-id'),
                 flowId: e.target.getAttribute('flow-id'),
+                pageNum: 1
         };
         state.dataShow; 
     }
@@ -624,9 +675,60 @@ $('.send').addEventListener('click',() => {
         }
     })
 })
+//excel导入
+let file = $('.import_form').children[0],
+    check_upload = false;
+$('.import').addEventListener('click',() => {
+    console.log('flie')
+    file.click();
+})
+file.addEventListener('change',() => {
+    chooseFile();
+    uploadFile();
+})
 
+function chooseFile() {
+    let test_last = /\.xls$|xlsx$/i,
+        fileValue = file.value;
+    if(test_last.test(fileValue)) {
+        check_upload = true;
+    }else {
+        window.alert('只能是excel文件');
+        return;
+    }
+}
 
+function uploadFile() {
+    if(!check_upload) return;
+    let formData = new FormData();
+    formData.append('excel',file.files[0]);
+    formData.append('flow_id',state.args.dataShow.flowId);
+    ajax({
+        method: 'post',
+        url: url + 'applydata/excel?token=' + sessionStorage.token,
+        type: 'file',
+        data: formData,
+        success: function(res) {
+            alert(res.message);
+            state.dataShow;
+        },
+        error: function(res) {
+            console.log(res)
+        }
+    })
+}
 
+//导出excel
+$('.export').addEventListener('click',()=>{
+    window.location.href = `${url}applydata/excel?token=${sessionStorage.token}&act_key=${state.args.dataShow.actKey}&flow_id=${state.args.dataShow.flowId}&sortby=grade&sort=asc`;
+})
+//分页
+$('.page').addEventListener('click',(e) => {
+    if(e.target.classList.contains('page-num')) {
+        state.args.dataShow.pageNum = e.target.innerText;
+        state.dataShow;
+    }
+})
 //短信模板
 //显示短信模板
 $('.message').addEventListener('click',() => {
@@ -635,28 +737,29 @@ $('.message').addEventListener('click',() => {
         lastcontentGroupClick.style.display = 'none';
         lastcontentGroupClick = $('.mess');
     }
-    ajax({
-        method: 'get',
-        url: url + 'sms/',
-        data: {
-            token: sessionStorage.token,
-        },
-        success: function(res) {
-            if(Object.prototype.toString.call(res.data) !== '[object Array]') {
-                res.data = [res.data];
-            }
-            let tr = res.data.map((item) => {
-                return(`<tr admin-temp-id=${item.temp_id}>
-                        <td>${item.temp_name}</td>
-                        <td>${item.was_test === 0 ? '未测试' : '已测试'}</td>
-                        <td><button class="x-btn">修改</button></td>
-                        <td><button class="r-btn">详情</button></td>
-                        <td class="test"><button class="b-btn">测试</button></td>
-                    </tr>`)
-            })
-            $('.mess-tbody').innerHTML = tr.join('');
-        }
-    })
+    state.messShow;
+    // ajax({
+    //     method: 'get',
+    //     url: url + 'sms/',
+    //     data: {
+    //         token: sessionStorage.token,
+    //     },
+    //     success: function(res) {
+    //         if(Object.prototype.toString.call(res.data) !== '[object Array]') {
+    //             res.data = [res.data];
+    //         }
+    //         let tr = res.data.map((item) => {
+    //             return(`<tr admin-temp-id=${item.temp_id}>
+    //                     <td>${item.temp_name}</td>
+    //                     <td>${item.was_test === 0 ? '未测试' : '已测试'}</td>
+    //                     <td><button class="x-btn">修改</button></td>
+    //                     <td><button class="r-btn">详情</button></td>
+    //                     <td class="test"><button class="b-btn">测试</button></td>
+    //                 </tr>`)
+    //         })
+    //         $('.mess-tbody').innerHTML = tr.join('');
+    //     }
+    // })
 })
 //创建新模板
 $('.create').addEventListener('click',() => {
