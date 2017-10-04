@@ -1,4 +1,8 @@
-var url = 'http://wx.idsbllp.cn/activity/api/',
+var url = '/activity/api/',
+
+
+
+//'http://wx.idsbllp.cn/activity/api/',
     lastcontentGroupClick = $('.acti');
     console.log(sessionStorage.token)
 function $(ele) {

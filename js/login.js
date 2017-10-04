@@ -1,9 +1,9 @@
 var user = $('#user');
 var pwd = $('#pwd'),
     remInfo = 0;
-var loginUrl = 'http://wx.idsbllp.cn/activity/api/auth/login';
-var remUrl = 'http://wx.idsbllp.cn/activity/api/auth/checkremember';
-var cancelRemUrl = 'http://wx.idsbllp.cn/activity/api/auth/cancelremember';
+var loginUrl = '/activity/api/auth/login';
+var remUrl = '/activity/api/auth/checkremember';
+var cancelRemUrl = '/activity/api/auth/cancelremember';
 
 $(document).ready(function() {
     $.get(remUrl, function(res) {
