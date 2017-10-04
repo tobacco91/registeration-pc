@@ -7,28 +7,7 @@ $('.message').addEventListener('click',() => {
         lastcontentGroupClick = $('.mess');
     }
     state.messShow;
-    // ajax({
-    //     method: 'get',
-    //     url: url + 'sms/',
-    //     data: {
-    //         token: sessionStorage.token,
-    //     },
-    //     success: function(res) {
-    //         if(Object.prototype.toString.call(res.data) !== '[object Array]') {
-    //             res.data = [res.data];
-    //         }
-    //         let tr = res.data.map((item) => {
-    //             return(`<tr admin-temp-id=${item.temp_id}>
-    //                     <td>${item.temp_name}</td>
-    //                     <td>${item.was_test === 0 ? '未测试' : '已测试'}</td>
-    //                     <td><button class="x-btn">修改</button></td>
-    //                     <td><button class="r-btn">详情</button></td>
-    //                     <td class="test"><button class="b-btn">测试</button></td>
-    //                 </tr>`)
-    //         })
-    //         $('.mess-tbody').innerHTML = tr.join('');
-    //     }
-    // })
+
 })
 //创建新模板
 $('.create').addEventListener('click',() => {
@@ -90,6 +69,7 @@ $('#start-test').addEventListener('click',() => {
   	        temp_id: parseInt($('#start-test').getAttribute('admin-temp-id'))
         },
         success: function(res) {
+            state.messShow;
             alert(res.message)
         }
     })

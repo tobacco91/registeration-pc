@@ -250,26 +250,48 @@ Object.defineProperties(state,{
     }
 })
 
-
+//充值
 $('.recharge').addEventListener('click',() => {
     openEdit($('.recharge-main'));
 })
 $('#recharge-test').addEventListener('click',() => {
-    ajax({
-        method: 'post',
-        url: url + 'admin/smscharge?token=' + sessionStorage.token,
-        data: {
-            amdin_id: "2",
-  	        sms_num: $('.sms-num').value
-        },
-        success: function(res) {
-            alert(res.message)
-            console.log(res)
-        },
-        error: function(res) {
-            alert(res.message)
-            console.log(res)
-        }
+    new Promise((resolve,reject) => {
+        ajax({
+            method: 'get',
+            url: url + 'admin/org',
+            data: {
+                token: sessionStorage.token
+            },
+            success: function(res) {
+                let id;
+                res.data.map((item) => {
+                    if($('.admin-name').value == item.account) {
+                        resolve(item.admin_id);
+                    }
+                })
+                reject('用户名错误');
+            }
+        })
+    }).then((res) => {
+        ajax({
+            method: 'post',
+            url: url + 'admin/smscharge?token=' + sessionStorage.token,
+            data: {
+                admin_id: res,
+                sms_num: $('.sms-num').value
+            },
+            success: function(res) {
+                alert(res.message)
+                console.log(res)
+            },
+            error: function(res) {
+                alert(res.message)
+                console.log(res)
+            }
+        })
+        //console.log(res)
+    }).catch((err) => {
+        alert(err)
     })
 })
 //活动管理
@@ -486,7 +508,28 @@ function dataNav() {
     })
 
 }
-dataNav()
+$('.nav').addEventListener('click',()=>{
+    let ul = '';
+    ajax({
+        method: 'get',
+        url: url + 'act/flow',
+        data: {
+            token: sessionStorage.token
+        },
+        success: function(res) {
+           // console.log(res)
+            res.data.map((ele,index) => {
+                ul += `<li><a href="#">${ele.activity_name}</a><ul>`;
+                ele.flowlist.map((item,index) => {
+                    ul +=`<li><a href="#" class="data-choose" activity-id=${ele.activity_id} flow-id=${item.flow_id} li-title=${ele.activity_name+"-"+item.flow_name}>${item.flow_name}</a></li>`
+                })
+                ul += `</ul></li>`;
+            })
+            $('.nav-data-second').innerHTML = ul;
+        }
+    })
+})
+//dataNav()
 
 //数据管理名单渲染  
 
@@ -738,28 +781,7 @@ $('.message').addEventListener('click',() => {
         lastcontentGroupClick = $('.mess');
     }
     state.messShow;
-    // ajax({
-    //     method: 'get',
-    //     url: url + 'sms/',
-    //     data: {
-    //         token: sessionStorage.token,
-    //     },
-    //     success: function(res) {
-    //         if(Object.prototype.toString.call(res.data) !== '[object Array]') {
-    //             res.data = [res.data];
-    //         }
-    //         let tr = res.data.map((item) => {
-    //             return(`<tr admin-temp-id=${item.temp_id}>
-    //                     <td>${item.temp_name}</td>
-    //                     <td>${item.was_test === 0 ? '未测试' : '已测试'}</td>
-    //                     <td><button class="x-btn">修改</button></td>
-    //                     <td><button class="r-btn">详情</button></td>
-    //                     <td class="test"><button class="b-btn">测试</button></td>
-    //                 </tr>`)
-    //         })
-    //         $('.mess-tbody').innerHTML = tr.join('');
-    //     }
-    // })
+
 })
 //创建新模板
 $('.create').addEventListener('click',() => {
@@ -821,6 +843,7 @@ $('#start-test').addEventListener('click',() => {
   	        temp_id: parseInt($('#start-test').getAttribute('admin-temp-id'))
         },
         success: function(res) {
+            state.messShow;
             alert(res.message)
         }
     })

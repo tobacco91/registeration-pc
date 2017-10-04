@@ -75,6 +75,11 @@ textarea {
 /*设置二级导航样式*/
 .nav ul li ul {
     display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 80px;
+    background-color: #30bed7;
 }
 .nav ul li:hover ul {
     position: absolute;

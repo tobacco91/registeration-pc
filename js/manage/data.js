@@ -22,7 +22,28 @@ function dataNav() {
     })
 
 }
-dataNav()
+$('.nav').addEventListener('click',()=>{
+    let ul = '';
+    ajax({
+        method: 'get',
+        url: url + 'act/flow',
+        data: {
+            token: sessionStorage.token
+        },
+        success: function(res) {
+           // console.log(res)
+            res.data.map((ele,index) => {
+                ul += `<li><a href="#">${ele.activity_name}</a><ul>`;
+                ele.flowlist.map((item,index) => {
+                    ul +=`<li><a href="#" class="data-choose" activity-id=${ele.activity_id} flow-id=${item.flow_id} li-title=${ele.activity_name+"-"+item.flow_name}>${item.flow_name}</a></li>`
+                })
+                ul += `</ul></li>`;
+            })
+            $('.nav-data-second').innerHTML = ul;
+        }
+    })
+})
+//dataNav()
 
 //数据管理名单渲染  
 

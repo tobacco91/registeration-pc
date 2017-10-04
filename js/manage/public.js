@@ -250,25 +250,47 @@ Object.defineProperties(state,{
     }
 })
 
-
+//充值
 $('.recharge').addEventListener('click',() => {
     openEdit($('.recharge-main'));
 })
 $('#recharge-test').addEventListener('click',() => {
-    ajax({
-        method: 'post',
-        url: url + 'admin/smscharge?token=' + sessionStorage.token,
-        data: {
-            amdin_id: "2",
-  	        sms_num: $('.sms-num').value
-        },
-        success: function(res) {
-            alert(res.message)
-            console.log(res)
-        },
-        error: function(res) {
-            alert(res.message)
-            console.log(res)
-        }
+    new Promise((resolve,reject) => {
+        ajax({
+            method: 'get',
+            url: url + 'admin/org',
+            data: {
+                token: sessionStorage.token
+            },
+            success: function(res) {
+                let id;
+                res.data.map((item) => {
+                    if($('.admin-name').value == item.account) {
+                        resolve(item.admin_id);
+                    }
+                })
+                reject('用户名错误');
+            }
+        })
+    }).then((res) => {
+        ajax({
+            method: 'post',
+            url: url + 'admin/smscharge?token=' + sessionStorage.token,
+            data: {
+                admin_id: res,
+                sms_num: $('.sms-num').value
+            },
+            success: function(res) {
+                alert(res.message)
+                console.log(res)
+            },
+            error: function(res) {
+                alert(res.message)
+                console.log(res)
+            }
+        })
+        //console.log(res)
+    }).catch((err) => {
+        alert(err)
     })
 })
