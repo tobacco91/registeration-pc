@@ -486,28 +486,6 @@ function flowShow(flow_id) {
 
 //数据管理
 //渲染nav
-function dataNav() {
-    let ul = '';
-    ajax({
-        method: 'get',
-        url: url + 'act/flow',
-        data: {
-            token: sessionStorage.token
-        },
-        success: function(res) {
-           // console.log(res)
-            res.data.map((ele,index) => {
-                ul += `<li><a href="#">${ele.activity_name}</a><ul>`;
-                ele.flowlist.map((item,index) => {
-                    ul +=`<li><a href="#" class="data-choose" activity-id=${ele.activity_id} flow-id=${item.flow_id} li-title=${ele.activity_name+"-"+item.flow_name}>${item.flow_name}</a></li>`
-                })
-                ul += `</ul></li>`;
-            })
-            $('.nav-data-second').innerHTML = ul;
-        }
-    })
-
-}
 $('.nav').addEventListener('click',()=>{
     let ul = '';
     ajax({
@@ -517,11 +495,12 @@ $('.nav').addEventListener('click',()=>{
             token: sessionStorage.token
         },
         success: function(res) {
-           // console.log(res)
+        console.log(res)
             res.data.map((ele,index) => {
                 ul += `<li><a href="#">${ele.activity_name}</a><ul>`;
                 ele.flowlist.map((item,index) => {
-                    ul +=`<li><a href="#" class="data-choose" activity-id=${ele.activity_id} flow-id=${item.flow_id} li-title=${ele.activity_name+"-"+item.flow_name}>${item.flow_name}</a></li>`
+                    console.log()
+                    ul +=`<li><a href="#" class="data-choose" activity-id=${ele.activity_id} flow-id=${item.flow_id} li-title="${ele.activity_name}-${item.flow_name}">${item.flow_name}</a></li>`
                 })
                 ul += `</ul></li>`;
             })
@@ -529,11 +508,9 @@ $('.nav').addEventListener('click',()=>{
         }
     })
 })
-//dataNav()
+
 
 //数据管理名单渲染  
-
-
 //点击nav   
 $('.nav-data-second').addEventListener('click',(e) => {
     if(e.target.classList.contains('data-choose')) {
@@ -604,10 +581,28 @@ $('.data-tbody').addEventListener('click',(e) => {
 let dataScore = [];
 function pushScore(score) {
     dataScore.push(score);
+    console.log(dataScore)
+}
+//修改分数提交
+$('.sure').addEventListener('click',()=>{
     let act = state.args.dataShow.actKey;
     let flow = state.args.dataShow.flowId;
-    console.log(flow,act)
-}
+    ajax({
+        method: 'post',
+        url: url + 'applydata/score?token=' + sessionStorage.token,
+        data: {
+            activity_key: act,
+            flow_id: flow,
+            scoreData: JSON.stringify(dataScore)
+        },
+        success: function(res) {
+            alert(res.message)
+        },
+        error: function(res) {
+            console.log(res)
+        }
+    })
+})
 
 //全选
 let checkInfo = false;
@@ -660,7 +655,7 @@ $('#confirm-add-applydata').addEventListener('click',()=> {
              contact: $('.applydata-num').value
         },
         success: function(res) {
-            console.log(res)
+            //console.log(res)
             alart(res.message)
         }
     })
