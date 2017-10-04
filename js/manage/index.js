@@ -583,6 +583,7 @@ function pushScore(score) {
     dataScore.push(score);
     console.log(dataScore)
 }
+
 //修改分数提交
 $('.sure').addEventListener('click',()=>{
     let act = state.args.dataShow.actKey;
@@ -603,6 +604,7 @@ $('.sure').addEventListener('click',()=>{
         }
     })
 })
+
 
 //全选
 let checkInfo = false;
@@ -689,18 +691,20 @@ $('.up').addEventListener('click',() => {
 })
 //发送短信 
 $('.send').addEventListener('click',() => {
-     let checked = [].slice.call($('.check input'))
+     let checked = [];
+     [].slice.call($('.check input'))
     .map((ele,index) => {
         if(ele.checked === true && ele.getAttribute('id') !== 'all') {
             //console.log(ele)
-            return ele.parentNode.parentNode.getAttribute('enroll-id');
+            checked.push(ele.parentNode.parentNode.getAttribute('enroll-id'));
         }
     })
+    //console.log(checked)
     ajax({
         method: 'post',
         url: url + 'applydata/sendsms?token=' + sessionStorage.token,
         data: {
-            enroll_id: checked.join(','),
+            enroll_id: checked + '',
             flow_id: state.args.dataShow.flowId
         },
         success: function(res) {
