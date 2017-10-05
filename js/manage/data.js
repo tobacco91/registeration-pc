@@ -172,7 +172,7 @@ $('#confirm-add-applydata').addEventListener('click',()=> {
         },
         success: function(res) {
             //console.log(res)
-            alart(res.message)
+            alert(res.message)
         }
     })
 })
@@ -283,5 +283,17 @@ $('.page').addEventListener('click',(e) => {
     if(e.target.classList.contains('page-num')) {
         state.args.dataShow.pageNum = e.target.innerText;
         state.dataShow;
+    }
+})
+//短信发送历史
+$('.his').addEventListener('click',()=>{
+    openEdit($('.show-mess-his-main'));
+    state.args.hisShow = {pageNum: 1};
+    state.hisShow;
+})
+$('.show-mess-his-page').addEventListener('click',(e) => {
+    if(e.target.classList.contains('page-his-num')) {
+        state.args.hisShow.pageNum = e.target.innerText;
+        state.hisShow;
     }
 })

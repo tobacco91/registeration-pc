@@ -1,8 +1,6 @@
-var url = '/activity/api/',
-
-
-
-//'http://wx.idsbllp.cn/activity/api/',
+var url = 
+//'/activity/api/',
+'https://redrock.team/activity/api/',
     lastcontentGroupClick = $('.acti');
     console.log(sessionStorage.token)
 function $(ele) {
@@ -112,7 +110,7 @@ Object.defineProperties(state,{
             let page = '';
             let pageClick = 'page-click';
             let pageLast = 'page-num';
-            console.log(state.args.dataShow.pageNum)
+            //console.log(state.args.dataShow.pageNum)
             for(let i = 1; i <= res.date.last_page; i ++) {
                 page +=`<li class=${i == state.args.dataShow.pageNum ? pageClick : pageLast}>${i}</li>`;
             }
@@ -248,6 +246,41 @@ Object.defineProperties(state,{
                 },
                 success: function(res) {
                     state.messShow = res;
+                }
+            })
+        }
+    },
+    hisShow: {
+        set: function(res) {
+            let inner = '';
+            res.data.data.map((item)=>{
+                inner += `<li class="show-mess-his-content">内容:${item.content}&emsp;&emsp;是否发送成功:${item.smg === '*' ? '发送失败' : '发送成功'}&emsp;&emsp;失败原因（成功为空)${item.sub_msg === null ? '' : item.sub_msg}</li>`;
+            })
+            $('.show-mess-his-ul').innerHTML = inner;
+            let page = '';
+            let pageClick = 'page-his-click';
+            let pageLast = 'page-his-num';
+            //console.log(state.args.dataShow.pageNum)
+            for(let i = 1; i <= res.data.last_page; i ++) {
+                page +=`<li class=${i == state.args.hisShow.pageNum ? pageClick : pageLast}>${i}</li>`;
+            }
+            $('.show-mess-his-page').innerHTML = page;
+        },
+        get: function() {
+            ajax({
+                method: 'get',
+                url: url + 'sms/history',
+                data: {
+                    token: sessionStorage.token,
+                    page: state.args.hisShow.pageNum,
+                    per_page: 2,
+                    status: 1
+                },
+                success: function(res) {
+                    state.hisShow = res;
+                },
+                error: function(res) {
+                    console.log(res.message)
                 }
             })
         }

@@ -84,6 +84,8 @@ $('#confirm-add-acti').addEventListener('click',function() {
         }
     })
 })
+
+//删除liucheng
 function flowDelete(flow_id) {
     ajax({
         method: 'delete',
@@ -93,7 +95,11 @@ function flowDelete(flow_id) {
             flow_id: flow_id
         },
         success: function(res) {
-            console.log(res)
+            alert(res.message)
+            //console.log(res)
+        },
+        error: function(res) {
+            alert(res.message)
         }
     })
 }

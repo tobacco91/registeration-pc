@@ -1,8 +1,6 @@
-var url = '/activity/api/',
-
-
-
-//'http://wx.idsbllp.cn/activity/api/',
+var url = 
+//'/activity/api/',
+'https://redrock.team/activity/api/',
     lastcontentGroupClick = $('.acti');
     console.log(sessionStorage.token)
 function $(ele) {
@@ -112,7 +110,7 @@ Object.defineProperties(state,{
             let page = '';
             let pageClick = 'page-click';
             let pageLast = 'page-num';
-            console.log(state.args.dataShow.pageNum)
+            //console.log(state.args.dataShow.pageNum)
             for(let i = 1; i <= res.date.last_page; i ++) {
                 page +=`<li class=${i == state.args.dataShow.pageNum ? pageClick : pageLast}>${i}</li>`;
             }
@@ -251,6 +249,41 @@ Object.defineProperties(state,{
                 }
             })
         }
+    },
+    hisShow: {
+        set: function(res) {
+            let inner = '';
+            res.data.data.map((item)=>{
+                inner += `<li class="show-mess-his-content">内容:${item.content}&emsp;&emsp;是否发送成功:${item.smg === '*' ? '发送失败' : '发送成功'}&emsp;&emsp;失败原因（成功为空)${item.sub_msg === null ? '' : item.sub_msg}</li>`;
+            })
+            $('.show-mess-his-ul').innerHTML = inner;
+            let page = '';
+            let pageClick = 'page-his-click';
+            let pageLast = 'page-his-num';
+            //console.log(state.args.dataShow.pageNum)
+            for(let i = 1; i <= res.data.last_page; i ++) {
+                page +=`<li class=${i == state.args.hisShow.pageNum ? pageClick : pageLast}>${i}</li>`;
+            }
+            $('.show-mess-his-page').innerHTML = page;
+        },
+        get: function() {
+            ajax({
+                method: 'get',
+                url: url + 'sms/history',
+                data: {
+                    token: sessionStorage.token,
+                    page: state.args.hisShow.pageNum,
+                    per_page: 2,
+                    status: 1
+                },
+                success: function(res) {
+                    state.hisShow = res;
+                },
+                error: function(res) {
+                    console.log(res.message)
+                }
+            })
+        }
     }
 })
 
@@ -384,6 +417,8 @@ $('#confirm-add-acti').addEventListener('click',function() {
         }
     })
 })
+
+//删除liucheng
 function flowDelete(flow_id) {
     ajax({
         method: 'delete',
@@ -393,7 +428,11 @@ function flowDelete(flow_id) {
             flow_id: flow_id
         },
         success: function(res) {
-            console.log(res)
+            alert(res.message)
+            //console.log(res)
+        },
+        error: function(res) {
+            alert(res.message)
         }
     })
 }
@@ -662,7 +701,7 @@ $('#confirm-add-applydata').addEventListener('click',()=> {
         },
         success: function(res) {
             //console.log(res)
-            alart(res.message)
+            alert(res.message)
         }
     })
 })
@@ -773,6 +812,18 @@ $('.page').addEventListener('click',(e) => {
     if(e.target.classList.contains('page-num')) {
         state.args.dataShow.pageNum = e.target.innerText;
         state.dataShow;
+    }
+})
+//短信发送历史
+$('.his').addEventListener('click',()=>{
+    openEdit($('.show-mess-his-main'));
+    state.args.hisShow = {pageNum: 1};
+    state.hisShow;
+})
+$('.show-mess-his-page').addEventListener('click',(e) => {
+    if(e.target.classList.contains('page-his-num')) {
+        state.args.hisShow.pageNum = e.target.innerText;
+        state.hisShow;
     }
 })
 //短信模板

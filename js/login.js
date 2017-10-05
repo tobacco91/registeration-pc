@@ -1,9 +1,9 @@
 var user = $('#user');
 var pwd = $('#pwd'),
     remInfo = 0;
-var loginUrl = '/activity/api/auth/login';
-var remUrl = '/activity/api/auth/checkremember';
-var cancelRemUrl = '/activity/api/auth/cancelremember';
+var loginUrl = 'https://redrock.team/activity/api/auth/login';
+var remUrl = 'https://redrock.team/activity/api/auth/checkremember';
+var cancelRemUrl = 'https://redrock.team/activity/api/auth/cancelremember';
 
 $(document).ready(function() {
     $.get(remUrl, function(res) {

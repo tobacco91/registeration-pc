@@ -74,6 +74,14 @@
                 <button type="button" id="edit-finish">完成</button>
             </form>
         </div><!--数据管理-->
+         <div class="show-mess-his-main">
+            <i class="iconfont icon-close"></i>
+                <h3>短信发送历史</h3>
+                <ul class="show-mess-his-ul">
+                    <li class="show-mess-his-content">内容:是否发送成功：失败原因（成功为空)</li>
+                </ul>
+                <ul class="show-mess-his-page"></ul>
+        </div><!--短信发送历史-->
         <div class="test-main">
             <i class="iconfont icon-close"></i>
             <h3>请填写接受测试的手机号：</h3>
@@ -93,16 +101,10 @@
         <div class="add-mess-main">
             <i class="iconfont icon-close"></i>
             <div>
-
-                <!--<p>模板名称<input type="text" class="add-mess-title"></p>
-                <p>内容<input type="text" class="add-mess-content"></p>
-                <p>时间地点<input type="text" class="add-mess-date"></p>-->
-                <!--<p class="add-mess-p">模板序号：<input type="text" class="add-mess-id"></p>-->
                 <h3>模板</h3>
                 <p>模板名称：<input type="text" class="add-mess-title"></p>
                 <p>添加内容：<input type="text" class="add-mess-content"></p>
                 <p>时间地点：<input type="text" class="add-mess-date"></p>
-                <!--<p class="add-mess-p">模板序号：<input type="text" class="add-mess-id"></p>-->
                 <button type="button" id="add-mess-finish">完成</button>
             </div>
         </div><!--新增一个短信模版-->
@@ -223,6 +225,7 @@
                 <!--<p class="data-total">
                     共有：<span class="number">77人</span>  
                 </p>-->
+                <button class="his b-btn">短信发送历史</button>
                 <button class="send b-btn">发信息</button>
                 <button class="sure b-btn">确认修改分数</button>
                 <button class="up b-btn">升级到下一流程</button>
