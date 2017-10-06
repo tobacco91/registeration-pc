@@ -23,6 +23,7 @@ $('#login').click(function() {
     if(sessionStorage.token !== undefined && sessionStorage.account === user.val()) {
         window.location.replace('./manage.html');
     }
+    //
     checkBlank(user, '请填写用户名');
     checkBlank(pwd, '请填写密码');
     if (checkBlank(user, '请填写用户名') && checkBlank(pwd, '请填写密码')) {
