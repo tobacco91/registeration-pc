@@ -10,7 +10,8 @@ $(document).ready(function() {
         console.log(res);
         if(res.status == 1) {
             sessionStorage.token = res.data.token;
-            window.location.replace('./manage.html');
+            sessionStorage.account = res.data.account;
+            user.val(res.data.account);
         } else if (res.status == 0 && res.data) {
             user.val(res.data.account);
             pwd[0].focus();
@@ -19,7 +20,9 @@ $(document).ready(function() {
 });
 $('#login').click(function() {
     remInfo = $('#rem').prop("checked") ? 1 : 0;
-    console.log(remInfo)
+    if(sessionStorage.token !== undefined && sessionStorage.account === user.val()) {
+        window.location.replace('./manage.html');
+    }
     checkBlank(user, '请填写用户名');
     checkBlank(pwd, '请填写密码');
     if (checkBlank(user, '请填写用户名') && checkBlank(pwd, '请填写密码')) {
