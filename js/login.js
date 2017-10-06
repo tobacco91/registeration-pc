@@ -9,7 +9,7 @@ $(document).ready(function() {
     $.get(remUrl, function(res) {
         console.log(res);
         if(res.status == 1) {
-            sessessionStorage.token = res.data.token;
+            sessionStorage.token = res.data.token;
             window.location.replace('./manage.html');
         } else if (res.status == 0 && res.data) {
             user.val(res.data.account);
@@ -17,14 +17,6 @@ $(document).ready(function() {
         }
     }) 
 });
-// $.ajax({
-//     type: 'get',
-//     async: true,
-//     url: remUrl,
-//     success:function(res) {
-//         console.log(res)
-//     }
-// })
 $('#login').click(function() {
     remInfo = $('#rem').prop("checked") ? 1 : 0;
     console.log(remInfo)
