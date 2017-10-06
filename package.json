@@ -5,11 +5,14 @@
   "main": "gulpfile.js",
   "dependencies": {
     "concat": "^1.0.3",
+    "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1"
   },
   "devDependencies": {
     "browser-sync": "^2.18.13",
-    "gulp": "^3.9.1"
+    "concat": "^1.0.3",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

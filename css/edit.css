@@ -1,5 +1,5 @@
 .edit {
-    /*display: block;*/
+    // display: block;
     display: none;
     position: absolute;
     top: 0;
@@ -23,7 +23,11 @@
 .add-flow-main,
 .add-user-main,
 .add-applydata-main,
-.show-applydata-main {
+.show-applydata-main,
+.show-flow-main,
+.show-mess-main,
+.recharge-main,
+.show-mess-his-main {
     position: absolute;
     margin: auto;
     top: 0;
@@ -69,7 +73,11 @@
 .add-mess-main p,
 .add-flow-main p,
 .add-user-main p,
-.add-applydata-main p {
+.add-applydata-main p,
+.show-mess-main p,
+.show-flow-main p,
+.recharge-main div,
+.show-mess-his-main ul {
     margin: 20px 0;
     font-size: 16px;
 }
@@ -90,7 +98,9 @@
 .add-flow-main select,
 .add-user-main input,
 .add-applydata-main input,
-.add-applydata-main textarea {
+.add-applydata-main textarea,
+.show-flow-main input,
+.recharge-main input {
     padding: 0 8px;
     width: 214px;
     height: 34px;
@@ -101,6 +111,9 @@
     font-size: 16px;
     color: #fff;
     outline: none;
+}
+.recharge-main .sms-num {
+    width: 70px;
 }
 .add-flow-main select {
     width: 230px;
@@ -116,7 +129,8 @@
 #add-mess-finish,
 #confirm-add-flow,
 #confirm-add-user,
-#confirm-add-applydata {
+#confirm-add-applydata,
+#recharge-test {
     width: 90px;
     height: 40px;
     line-height: 40px;
