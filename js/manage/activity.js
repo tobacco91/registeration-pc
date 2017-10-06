@@ -26,6 +26,9 @@ $('.acti-main').addEventListener('click',function(e){
                 url: url + 'act/' + act_key + '/start?token='+ sessionStorage.token,
                 success: function(res) { 
                     alert(res.message);
+                },
+                error: function(res) {
+                    alert(res.message);
                 }
             })
             break; 
@@ -40,6 +43,9 @@ $('.acti-main').addEventListener('click',function(e){
                 method: 'put',
                 url: url + 'act/' + act_key + '/end?token=' + sessionStorage.token,
                 success: function(res) { 
+                    alert(res.message);
+                },
+                error: function(res) {
                     alert(res.message);
                 }
             })
