@@ -770,8 +770,11 @@ $('.send').addEventListener('click',() => {
 let file = $('.import_form').children[0],
     check_upload = false;
 $('.import').addEventListener('click',() => {
-    console.log('flie')
-    file.click();
+    openEdit($('.prompt-main'))
+    setTimeout(()=> {
+        file.click();
+    },500)
+    
 })
 file.addEventListener('change',() => {
     chooseFile();
