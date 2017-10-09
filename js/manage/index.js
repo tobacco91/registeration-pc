@@ -868,11 +868,12 @@ $('.create').addEventListener('click',() => {
                 token: sessionStorage.token
             },
             success: function(res) {
-                console.log(res)
-                const p = res.data.map((item,index) => {
-                    return `<p>序号：${item.admin_temp_id} 模板内容：${item.sms_temp}</p>`
+                //console.log(res)
+                let p = `<option selected="selected" disabled="disabled"  style='display: none' value=''>请选择原始模板</option> `;
+                res.data.map((item,index) => {
+                    p += `<option value=${item.admin_temp_id}>${item.sms_temp}</option>`
                 })
-                $('.templet-model').innerHTML = p.join('');
+                $('.add-mess-temp').innerHTML = p;
             }
         })
     }
@@ -957,7 +958,7 @@ $('#add-mess-finish').addEventListener('click',() => {
             url: url + 'sms/?token=' + sessionStorage.token,
             type: 'form',
             data: {
-                admin_temp_id: $('.add-mess-order').value,
+                admin_temp_id: $('.add-mess-temp').value,
                 temp_name: $('.add-mess-title').value,
                 'variables[name]': '${full_name}',
                 'variables[content]': $('.add-mess-content').value,
