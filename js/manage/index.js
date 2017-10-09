@@ -347,7 +347,7 @@ $('.acti-manage').addEventListener('click',function() {
 //显示流程
 function showDetail(act_key) {
     //console.log(act_key)
-    $('.tips').innerText = tipsArr[1];
+    $('.tips').innerHTML = tipsArr[1];
     state.args.flowShow = {actKey : act_key};
     state.flowShow;
 
@@ -462,6 +462,7 @@ function flowMess() {
             let tr = res.data.map((item) => {
                 return(`<option value=${item.temp_id}>${item.temp_name}</option>`)
             })
+            tr.push(`<option value="0">不绑定短信模板</option>`)
             $('.flow-mess').innerHTML = tr.join('');
         }
     })
@@ -480,6 +481,7 @@ $('#confirm-add-flow').addEventListener('click',() => {
         method = 'put';
         nowUrl = url + 'flow/' + $('#confirm-add-flow').getAttribute('flow-id') + '?token=' + sessionStorage.token;
     }
+    console.log($('.flow-select').value)
     ajax({
         method: method,
         url: nowUrl,
@@ -662,9 +664,12 @@ $('.sure').addEventListener('click',()=>{
 //全选
 let checkInfo = false;
 $('#all').addEventListener('click',() => {
-        Array.prototype.slice.call($('.data-table input')).forEach(function(element) {
-            element.checked = !checkInfo;
-        });
+        // Array.prototype.slice.call($('.data-table input')).forEach(function(element) {
+        //     element.checked = !checkInfo;
+        // });
+        if(checkInfo) {
+            alert('你已选择了此流程下所有的学生（不仅是本页哦~）');
+        }
         checkInfo = !checkInfo;
 })
 

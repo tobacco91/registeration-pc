@@ -123,9 +123,12 @@ $('.sure').addEventListener('click',()=>{
 //全选
 let checkInfo = false;
 $('#all').addEventListener('click',() => {
-        Array.prototype.slice.call($('.data-table input')).forEach(function(element) {
-            element.checked = !checkInfo;
-        });
+        // Array.prototype.slice.call($('.data-table input')).forEach(function(element) {
+        //     element.checked = !checkInfo;
+        // });
+        if(checkInfo) {
+            alert('你已选择了此流程下所有的学生（不仅是本页哦~）');
+        }
         checkInfo = !checkInfo;
 })
 
