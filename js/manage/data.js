@@ -95,7 +95,7 @@ $('.data-tbody').addEventListener('click',(e) => {
 let dataScore = [];
 function pushScore(score) {
     dataScore.push(score);
-    console.log(dataScore)
+    //console.log(dataScore)
 }
 
 //修改分数提交

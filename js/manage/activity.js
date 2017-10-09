@@ -2,6 +2,7 @@
 //显示活动
 $('.acti-manage').addEventListener('click',function() {
     $('.acti').style.display = 'block';
+    $('.tips').innerHTML = tipsArr[0];
     if(lastcontentGroupClick !== $('.acti')) {
         lastcontentGroupClick.style.display = 'none';
         lastcontentGroupClick = $('.acti');
@@ -10,7 +11,8 @@ $('.acti-manage').addEventListener('click',function() {
 })
 //显示流程
 function showDetail(act_key) {
-    console.log(act_key)
+    //console.log(act_key)
+    $('.tips').innerText = tipsArr[1];
     state.args.flowShow = {actKey : act_key};
     state.flowShow;
 

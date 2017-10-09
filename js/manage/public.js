@@ -10,7 +10,7 @@ function $(ele) {
         return document.querySelectorAll(ele);
     }
 }
-
+var tipsArr = ['TIPS:<br/> 1. 点击开始，微信端将开启该活动的报名入口。<br/>2. 点击活动名称，进入流程设计界面','TIPS：<br/>1. 点击右上角新增流程，创建一个新的流程；<br/>2. 创建\修改时可以绑定短信模板（该模板将会用于对该流程下的报名人员的短信发送）；<br/>3. 需要新的短信模板请先点击菜单"短信模板"->"新建短信模板"。']
 function ajax(conf) {
     var method = conf.method;
     var url = conf.url;
@@ -99,9 +99,11 @@ Object.defineProperties(state,{
             res.date.data.map((ele,index) => {
                 tr += `<tr enroll-id=${ele.enroll_id} >
                     <td class="check"><input type="checkbox"></td>
+                    <td class="code">${ele.stu_code}</td>
                     <td class="name">${ele.full_name}</td>
-                    <td class="status"><input type="number" class="data-input-socre" value=${ele.score === null ? 0 : ele.score} onblur="pushScore({enroll_id:${ele.enroll_id},score:parseInt(this.value)})"/></td>
                     <td class="phone">${ele.contact}</td>
+                    <td class="info">${ele.was_send_sms === 0 ? '否' : '是'}</td>
+                    <td class="status"><input type="number" class="data-input-socre" value=${ele.score === null ? 0 : ele.score} onblur="pushScore({enroll_id:${ele.enroll_id},score:parseInt(this.value)})"/></td>
                     <td class="mod mod-btn"><button class="x-btn">详情</button></td>
                     <td class="mod mod-btn"><button class="r-btn">修改</button></td>
                     <td class="finish fin-btn"><button class="b-btn">移除</button></td>
