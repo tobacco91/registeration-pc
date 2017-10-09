@@ -132,7 +132,7 @@ Object.defineProperties(state,{
                     sortby: 'score',
                     sort: 'asc',
                     page: state.args.dataShow.pageNum,
-                    per_page: 2
+                    per_page: 10
                 },
                 success: function(res) {
                     state.dataShow = res;
@@ -290,9 +290,9 @@ Object.defineProperties(state,{
 })
 
 //充值
-$('.recharge').addEventListener('click',() => {
-    openEdit($('.recharge-main'));
-})
+// $('.recharge').addEventListener('click',() => {
+//     openEdit($('.recharge-main'));
+// })
 $('#recharge-test').addEventListener('click',() => {
     new Promise((resolve,reject) => {
         ajax({

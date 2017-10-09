@@ -126,7 +126,7 @@ $('#all').addEventListener('click',() => {
         // Array.prototype.slice.call($('.data-table input')).forEach(function(element) {
         //     element.checked = !checkInfo;
         // });
-        if(checkInfo) {
+        if(!checkInfo) {
             alert('你已选择了此流程下所有的学生（不仅是本页哦~）');
         }
         checkInfo = !checkInfo;
@@ -208,31 +208,60 @@ $('.up').addEventListener('click',() => {
 })
 //发送短信 
 $('.send').addEventListener('click',() => {
-     let checked = [];
-     [].slice.call($('.check input'))
-    .map((ele,index) => {
-        if(ele.checked === true && ele.getAttribute('id') !== 'all') {
-            //console.log(ele)
-            checked.push(ele.parentNode.parentNode.getAttribute('enroll-id'));
+    new Promise((resolve,reject) => {
+        let checked = [];
+        if(checkInfo) {
+            ajax({
+                method: 'get',
+                url: url + 'applydata',
+                data: {
+                    token: sessionStorage.token,
+                    act_key: state.args.dataShow.actKey,
+                    flow_id: state.args.dataShow.flowId,
+                    sortby: 'score',
+                    sort: 'asc',
+                    page: 1,
+                    per_page: 1000000
+                },
+                success: function(res) {
+                    res.date.data.map((item) => {
+                        checked.push(item.enroll_id)
+                    })
+                    resolve(checked)
+                }
+            })
+        } else {
+            [].slice.call($('.check input'))
+            .map((ele,index) => {
+                if(ele.checked === true && ele.getAttribute('id') !== 'all') {
+                    //console.log(ele)
+                    checked.push(ele.parentNode.parentNode.getAttribute('enroll-id'));
+                }
+            })
+            resolve(checked);
         }
+    }).then((checked) => {
+        console.log(checked)
+        ajax({
+            method: 'post',
+            url: url + 'applydata/sendsms?token=' + sessionStorage.token,
+            data: {
+                enroll_id: checked + '',
+                flow_id: state.args.dataShow.flowId
+            },
+            success: function(res) {
+                alert(res.message)
+                console.log(res)
+            },
+            error: function(res) {
+                alert(res.message)
+                //console.log(res)
+            }
+        })
     })
-    //console.log(checked)
-    ajax({
-        method: 'post',
-        url: url + 'applydata/sendsms?token=' + sessionStorage.token,
-        data: {
-            enroll_id: checked + '',
-            flow_id: state.args.dataShow.flowId
-        },
-        success: function(res) {
-            alert(res.message)
-            console.log(res)
-        },
-        error: function(res) {
-            alert(res.message)
-            //console.log(res)
-        }
-    })
+     
+    
+    
 })
 //excel导入
 let file = $('.import_form').children[0],
