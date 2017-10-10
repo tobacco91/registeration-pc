@@ -37,3 +37,17 @@
 .template > p {
     margin-top: 50px;
 }
+.mess-table {
+    width: 100%;
+    border-spacing: 2px 10px;
+}
+.mess-table > tbody {
+    line-height: 20px;
+    font-size: 14px;
+}
+.mess-content {
+    width: 50%;
+}
+.mess-fail {
+    width: 10%;
+}

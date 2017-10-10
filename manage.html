@@ -54,6 +54,7 @@
         <div class="message tabs">短信模板</div>
         <div class="acti-manage tabs">活动管理</div>
         <!--<div class="recharge tabs">充值</div>-->
+        <div class="his tabs">短信历史</div>
         <div class="tips"></div>
     </div>
     <div class="edit content">
@@ -75,14 +76,14 @@
                 <button type="button" id="edit-finish">完成</button>
             </form>
         </div><!--数据管理-->
-         <div class="show-mess-his-main">
+        <!-- <div class="show-mess-his-main">
             <i class="iconfont icon-close"></i>
                 <h3>短信发送历史</h3>
                 <ul class="show-mess-his-ul">
                     <li class="show-mess-his-content">内容:是否发送成功：失败原因（成功为空)</li>
                 </ul>
                 <ul class="show-mess-his-page"></ul>
-        </div><!--短信发送历史-->
+        </div> --><!--短信发送历史-->
         <div class="test-main">
             <i class="iconfont icon-close"></i>
             <h3>请填写接受测试的手机号：</h3>
@@ -245,13 +246,15 @@
                     <option value="1">显示已发送短信的学生</option>
                     <option value="2">显示未发送短信的学生</option>
                 </select>-->
-                <button class="his b-btn">短信发送历史</button>
+                <!-- <button class="his b-btn">短信发送历史</button> -->
                 <button class="send b-btn">发信息</button>
                 <button class="sure b-btn">确认修改分数</button>
                 <button class="up b-btn">升级到下一流程</button>
                 <button class="export b-btn">导出Excel文件</button>
                 <button class="import b-btn">导入Excel文件</button>
-                <i class="iconfont icon-add1 icon-add-stu"></i>
+                <button class="icon-add-stu">
+                    <i class="iconfont icon-add1"></i>
+                </button>
             </div>
             <table class="data-table">
                 <thead>
@@ -389,6 +392,38 @@
                 <input type="submit">
             </form>
         </div><!-- end acti-details -->
+        <div class="show-mess-his-main">
+            <table class="mess-table">
+                <thead>
+                    <tr>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>电话</th>
+                        <th class="mess-content">短信内容</th>
+                        <th class="mess-fail">是否发送成功</th>
+                        <th>失败原因</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="mess-stu-num">2015210111</td>
+                        <td class="mess-stu-name">一二三四</td>
+                        <td class="mess-num">12345678909</td>
+                        <td class="mess-content">亲爱的一一同学，恭喜你通过了产品面试，请于周日下午晚7点到2117参加二面</td>
+                        <td class="mess-succ">否</td>
+                        <td class="mess-fail">手机号出错</td>
+                    </tr>
+                    <tr>
+                        <td class="mess-stu-num">2015210111</td>
+                        <td class="mess-stu-name">一二三四</td>
+                        <td class="mess-num">12345678909</td>
+                        <td class="mess-content">亲爱的一一同学，恭喜你通过了产品面试，请于周日下午晚7点到2117参加二面。收到请回复，加油</td>
+                        <td class="mess-succ">否</td>
+                        <td class="mess-fail">余额不足啦啦啦</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 <script src="js/manage/index.js"></script>

@@ -26,8 +26,7 @@
 .show-applydata-main,
 .show-flow-main,
 .show-mess-main,
-.recharge-main,
-.show-mess-his-main {
+.recharge-main {
     position: absolute;
     margin: auto;
     top: 0;
@@ -76,8 +75,7 @@
 .add-applydata-main p,
 .show-mess-main p,
 .show-flow-main p,
-.recharge-main div,
-.show-mess-his-main ul {
+.recharge-main div {
     margin: 20px 0;
     font-size: 16px;
 }

@@ -28,6 +28,13 @@
 .iconfont {
     cursor: pointer;
 }
+.icon-add-stu {
+    padding: 6px 10px;
+    line-height: 16px;
+    background-color: #fe6b62;   
+    border-radius: 4px;
+
+}
 .data > table {
     width: 100%;
 }
@@ -52,10 +59,13 @@ tbody {
     width: 10%;
 }
 .status {
-    width: 15;
+    width: 15px;
+}
+.info {
+    width: 14%;
 }
 .phone {
-    width: 40%;
+    width: 30%;
 }
 .page {
     overflow: hidden;
