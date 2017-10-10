@@ -105,7 +105,8 @@ function flowDelete(flow_id) {
             flow_id: flow_id
         },
         success: function(res) {
-            alert(res.message)
+            alert('删除成功');
+        // alert(res.message)
             //console.log(res)
         },
         error: function(res) {

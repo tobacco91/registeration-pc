@@ -130,7 +130,7 @@ Object.defineProperties(state,{
                 sortby: 'score',
                 sort: 'asc',
                 page: state.args.dataShow.pageNum,
-                per_page: 10
+                per_page: 50
             }
             switch(state.args.dataShow.searchType) {
                 case 'code': 
@@ -296,7 +296,7 @@ Object.defineProperties(state,{
                 data: {
                     token: sessionStorage.token,
                     page: state.args.hisShow.pageNum,
-                    per_page: 10,
+                    per_page: 50,
                     status: 1
                 },
                 success: function(res) {
@@ -306,6 +306,29 @@ Object.defineProperties(state,{
                     console.log(res.message)
                 }
             })
+        }
+    },
+    tempList: {
+        set: function(res) {
+            let p = '';
+            res.sms_variables.map(item => {
+                p += `<p>${item}:<input type="text" class="${item}">`;
+                if(res.dynamic_variables[item] !== '') {
+                    let option = `<option value="0">不选</option>`;
+                    let select = '';
+                    for (let i in res.dynamic_variables[item]) {
+                        //console.log(res.dynamic_variables[item][i])
+                        option += `<option value="${i}">${res.dynamic_variables[item][i]}</option>`
+                    }
+                    select = `<select>${option}</select>`;
+                    p = p + select + '</p>';
+                } else {
+                    p = p + '</p>';
+                }
+                
+            })
+            $('.temp-list-var').innerHTML = p;
+           console.log($('.temp-list-var select'))//arr or单个
         }
     }
 })
@@ -362,14 +385,26 @@ window.addEventListener('popstate',(e)=>{
     if(e.state === null) return;
     switch (e.state.url) {
         case 'acti': 
-            $('.acti-manage').click();
+        $('.acti').style.display = 'block';
+        $('.tips').innerHTML = tipsArr[0];
+        if(lastcontentGroupClick !== $('.acti')) {
+            lastcontentGroupClick.style.display = 'none';
+            lastcontentGroupClick = $('.acti');
+        }
+        state.actiShow;
+            //$('.acti-manage').click();
         break;
         case 'mess': 
-            $('.message').click();
+            //$('.message').click();
+            if(lastcontentGroupClick !== $('.mess')) {
+                $('.mess').style.display = 'block';
+                lastcontentGroupClick.style.display = 'none';
+                lastcontentGroupClick = $('.mess');
+            }
+            state.messShow;
         break;
         case 'data':
             $('.order').innerText = sessionStorage.title;
-            //console.log(e.state.args)
             state.args.dataShow.pageNum = e.state.args.pageNum;
             state.dataShow;
         break;
@@ -383,7 +418,11 @@ window.addEventListener('popstate',(e)=>{
             state.hisShow;
         break;
         case 'messCreate': 
-             $('.create').click();
+            if(lastcontentGroupClick !== $('.template')) {
+                $('.template').style.display = 'block';
+                lastcontentGroupClick.style.display = 'none';
+                lastcontentGroupClick = $('.template');
+            }
         break;
         case 'flow':
             $('.tips').innerHTML = tipsArr[1];
@@ -394,7 +433,7 @@ window.addEventListener('popstate',(e)=>{
 
 })
 window.addEventListener('load',(e)=>{
-    console.log('load')
+    //console.log('load')
     if(history.state === null) return;
     switch (history.state.url) {
         case 'acti': 
@@ -535,7 +574,8 @@ function flowDelete(flow_id) {
             flow_id: flow_id
         },
         success: function(res) {
-            alert(res.message)
+            alert('删除成功');
+        // alert(res.message)
             //console.log(res)
         },
         error: function(res) {
@@ -1015,22 +1055,33 @@ $('.create').addEventListener('click',() => {
         $('.template').style.display = 'block';
         lastcontentGroupClick.style.display = 'none';
         lastcontentGroupClick = $('.template');
-        ajax({
-            method: 'get',
-            url: url + 'sms/templet',
-            data: {
-                token: sessionStorage.token
-            },
-            success: function(res) {
-                //console.log(res)
-                let p = `<option selected="selected" disabled="disabled"  style='display: none' value=''>请选择原始模板</option> `;
-                res.data.map((item,index) => {
-                    p += `<option value=${item.admin_temp_id}>${item.sms_temp}</option>`
-                })
-                $('.add-mess-temp').innerHTML = p;
-            }
-        })
     }
+})
+
+//创建原始模板下拉框
+ajax({
+    method: 'get',
+    url: url + 'sms/templet',
+    data: {
+        token: sessionStorage.token
+    },
+    success: function(res) {
+        let tempList = {};
+        res.data.map(item => {
+            tempList[item.admin_temp_id] = item;
+        })
+        sessionStorage.tempList = JSON.stringify(tempList);
+        let p = `<option selected="selected" disabled="disabled"  style='display: none' value=''>请选择原始模板</option> `;
+        res.data.map((item,index) => {
+            p += `<option value=${item.admin_temp_id}>${item.sms_temp}</option>`
+        })
+        $('.add-mess-temp').innerHTML = p;
+    }
+})
+//监听原始模板变化
+$('.add-mess-temp').addEventListener('change',(e) => {
+    state.tempList = JSON.parse(sessionStorage.tempList)[$('.add-mess-temp').value]
+    //console.log(JSON.parse(sessionStorage.tempList)[$('.add-mess-temp').value]);
 })
 //测试 修改 删除 短信模板
 $('.mess-tbody').addEventListener('click',(e) => {

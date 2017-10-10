@@ -130,7 +130,7 @@ Object.defineProperties(state,{
                 sortby: 'score',
                 sort: 'asc',
                 page: state.args.dataShow.pageNum,
-                per_page: 10
+                per_page: 50
             }
             switch(state.args.dataShow.searchType) {
                 case 'code': 
@@ -296,7 +296,7 @@ Object.defineProperties(state,{
                 data: {
                     token: sessionStorage.token,
                     page: state.args.hisShow.pageNum,
-                    per_page: 10,
+                    per_page: 50,
                     status: 1
                 },
                 success: function(res) {
@@ -306,6 +306,29 @@ Object.defineProperties(state,{
                     console.log(res.message)
                 }
             })
+        }
+    },
+    tempList: {
+        set: function(res) {
+            let p = '';
+            res.sms_variables.map(item => {
+                p += `<p>${item}:<input type="text" class="${item}">`;
+                if(res.dynamic_variables[item] !== '') {
+                    let option = `<option value="0">不选</option>`;
+                    let select = '';
+                    for (let i in res.dynamic_variables[item]) {
+                        //console.log(res.dynamic_variables[item][i])
+                        option += `<option value="${i}">${res.dynamic_variables[item][i]}</option>`
+                    }
+                    select = `<select>${option}</select>`;
+                    p = p + select + '</p>';
+                } else {
+                    p = p + '</p>';
+                }
+                
+            })
+            $('.temp-list-var').innerHTML = p;
+           console.log($('.temp-list-var select'))//arr or单个
         }
     }
 })
@@ -362,14 +385,26 @@ window.addEventListener('popstate',(e)=>{
     if(e.state === null) return;
     switch (e.state.url) {
         case 'acti': 
-            $('.acti-manage').click();
+        $('.acti').style.display = 'block';
+        $('.tips').innerHTML = tipsArr[0];
+        if(lastcontentGroupClick !== $('.acti')) {
+            lastcontentGroupClick.style.display = 'none';
+            lastcontentGroupClick = $('.acti');
+        }
+        state.actiShow;
+            //$('.acti-manage').click();
         break;
         case 'mess': 
-            $('.message').click();
+            //$('.message').click();
+            if(lastcontentGroupClick !== $('.mess')) {
+                $('.mess').style.display = 'block';
+                lastcontentGroupClick.style.display = 'none';
+                lastcontentGroupClick = $('.mess');
+            }
+            state.messShow;
         break;
         case 'data':
             $('.order').innerText = sessionStorage.title;
-            //console.log(e.state.args)
             state.args.dataShow.pageNum = e.state.args.pageNum;
             state.dataShow;
         break;
@@ -383,7 +418,11 @@ window.addEventListener('popstate',(e)=>{
             state.hisShow;
         break;
         case 'messCreate': 
-             $('.create').click();
+            if(lastcontentGroupClick !== $('.template')) {
+                $('.template').style.display = 'block';
+                lastcontentGroupClick.style.display = 'none';
+                lastcontentGroupClick = $('.template');
+            }
         break;
         case 'flow':
             $('.tips').innerHTML = tipsArr[1];
@@ -394,7 +433,7 @@ window.addEventListener('popstate',(e)=>{
 
 })
 window.addEventListener('load',(e)=>{
-    console.log('load')
+    //console.log('load')
     if(history.state === null) return;
     switch (history.state.url) {
         case 'acti': 

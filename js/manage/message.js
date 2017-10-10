@@ -17,22 +17,33 @@ $('.create').addEventListener('click',() => {
         $('.template').style.display = 'block';
         lastcontentGroupClick.style.display = 'none';
         lastcontentGroupClick = $('.template');
-        ajax({
-            method: 'get',
-            url: url + 'sms/templet',
-            data: {
-                token: sessionStorage.token
-            },
-            success: function(res) {
-                //console.log(res)
-                let p = `<option selected="selected" disabled="disabled"  style='display: none' value=''>请选择原始模板</option> `;
-                res.data.map((item,index) => {
-                    p += `<option value=${item.admin_temp_id}>${item.sms_temp}</option>`
-                })
-                $('.add-mess-temp').innerHTML = p;
-            }
-        })
     }
+})
+
+//创建原始模板下拉框
+ajax({
+    method: 'get',
+    url: url + 'sms/templet',
+    data: {
+        token: sessionStorage.token
+    },
+    success: function(res) {
+        let tempList = {};
+        res.data.map(item => {
+            tempList[item.admin_temp_id] = item;
+        })
+        sessionStorage.tempList = JSON.stringify(tempList);
+        let p = `<option selected="selected" disabled="disabled"  style='display: none' value=''>请选择原始模板</option> `;
+        res.data.map((item,index) => {
+            p += `<option value=${item.admin_temp_id}>${item.sms_temp}</option>`
+        })
+        $('.add-mess-temp').innerHTML = p;
+    }
+})
+//监听原始模板变化
+$('.add-mess-temp').addEventListener('change',(e) => {
+    state.tempList = JSON.parse(sessionStorage.tempList)[$('.add-mess-temp').value]
+    //console.log(JSON.parse(sessionStorage.tempList)[$('.add-mess-temp').value]);
 })
 //测试 修改 删除 短信模板
 $('.mess-tbody').addEventListener('click',(e) => {
