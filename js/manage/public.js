@@ -1,7 +1,8 @@
 var url = 
 //'/activity/api/',
+
 'https://redrock.team/activity/api/',
-    pageUrl='/manage.html#/',
+    pageUrl='#/',
     lastcontentGroupClick = $('.acti');
     console.log(sessionStorage.token)
 function $(ele) {
@@ -364,7 +365,6 @@ window.addEventListener('load',(e)=>{
             $('.message').click();
         break;
         case 'data':
-            // state.args.dataShow = 
             state.args.dataShow = history.state.args;
             state.dataShow;
         break;
