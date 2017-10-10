@@ -1,6 +1,7 @@
 var url = 
 //'/activity/api/',
 'https://redrock.team/activity/api/',
+    pageUrl='/manage.html#/',
     lastcontentGroupClick = $('.acti');
     console.log(sessionStorage.token)
 function $(ele) {
@@ -79,7 +80,6 @@ function openEdit(ele) {
     $('.edit').style.display = 'block';
     ele.style.display = 'block';
 }
-
 
 
 let state = {};    
@@ -332,4 +332,49 @@ $('#recharge-test').addEventListener('click',() => {
     }).catch((err) => {
         alert(err)
     })
+})
+
+
+
+//路由
+window.addEventListener('popstate',(e)=>{
+    if(e.state === null) return;
+    switch (e.state.url) {
+        case 'acti': 
+            $('.acti-manage').click();
+        break;
+        case 'mess': 
+            $('.message').click();
+        break;
+        case 'data':
+            console.log(e.state.args)
+            state.args.dataShow.pageNum = e.state.args.pageNum;
+            state.dataShow;
+        break;
+    }
+
+})
+window.addEventListener('load',(e)=>{
+    console.log(history.state)
+    switch (history.state.url) {
+        case 'acti': 
+            $('.acti-manage').click();
+        break;
+        case 'mess': 
+            $('.message').click();
+        break;
+        case 'data':
+            // state.args.dataShow = 
+            state.args.dataShow = history.state.args;
+            state.dataShow;
+        break;
+        case 'messCreate': 
+             $('.create').click();
+        break;
+        case 'flow':
+            $('.tips').innerHTML = tipsArr[1];
+            state.args.flowShow = history.state.args;
+            state.flowShow;
+        break;
+    }
 })

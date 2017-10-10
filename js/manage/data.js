@@ -1,6 +1,7 @@
 //数据管理
 //渲染nav
 $('.nav').addEventListener('click',()=>{
+    
     let ul = '';
     ajax({
         method: 'get',
@@ -27,6 +28,7 @@ $('.nav').addEventListener('click',()=>{
 //数据管理名单渲染  
 //点击nav   
 $('.nav-data-second').addEventListener('click',(e) => {
+    
     if(e.target.classList.contains('data-choose')) {
         $('.order').innerText = e.target.getAttribute('li-title');
         state.args.dataShow = {
@@ -35,6 +37,9 @@ $('.nav-data-second').addEventListener('click',(e) => {
                 pageNum: 1
         };
         state.dataShow; 
+        setTimeout(()=>{
+            history.pushState({url: 'data',args: state.args.dataShow},'',pageUrl + 'data?pageNum=1')
+        },0)
     }
     
 })
@@ -123,9 +128,9 @@ $('.sure').addEventListener('click',()=>{
 //全选
 let checkInfo = false;
 $('#all').addEventListener('click',() => {
-        // Array.prototype.slice.call($('.data-table input')).forEach(function(element) {
-        //     element.checked = !checkInfo;
-        // });
+        Array.prototype.slice.call($('.data-table input')).forEach(function(element) {
+            element.checked = !checkInfo;
+        });
         if(!checkInfo) {
             alert('你已选择了此流程下所有的学生（不仅是本页哦~）');
         }
@@ -318,6 +323,7 @@ $('.page').addEventListener('click',(e) => {
     if(e.target.classList.contains('page-num')) {
         state.args.dataShow.pageNum = e.target.innerText;
         state.dataShow;
+        history.pushState({url: 'data',args: state.args.dataShow},'',pageUrl + 'data?pageNum='+ e.target.innerText)
     }
 })
 //短信发送历史
@@ -332,3 +338,7 @@ $('.show-mess-his-page').addEventListener('click',(e) => {
         state.hisShow;
     }
 })
+
+
+//显示成员选择
+//$('.mess-show-select').addEventListener('change',())

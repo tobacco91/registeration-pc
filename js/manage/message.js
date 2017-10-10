@@ -1,6 +1,7 @@
 //短信模板
 //显示短信模板
 $('.message').addEventListener('click',() => {
+    history.pushState({url: 'mess'},'',pageUrl + 'mess')
     if(lastcontentGroupClick !== $('.mess')) {
         $('.mess').style.display = 'block';
         lastcontentGroupClick.style.display = 'none';
@@ -11,6 +12,7 @@ $('.message').addEventListener('click',() => {
 })
 //创建新模板
 $('.create').addEventListener('click',() => {
+    history.pushState({url: 'messCreate'},'',pageUrl + 'messCreate')
     if(lastcontentGroupClick !== $('.template')) {
         $('.template').style.display = 'block';
         lastcontentGroupClick.style.display = 'none';

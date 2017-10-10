@@ -1,6 +1,7 @@
 var url = 
 //'/activity/api/',
 'https://redrock.team/activity/api/',
+    pageUrl='/manage.html#/',
     lastcontentGroupClick = $('.acti');
     console.log(sessionStorage.token)
 function $(ele) {
@@ -79,7 +80,6 @@ function openEdit(ele) {
     $('.edit').style.display = 'block';
     ele.style.display = 'block';
 }
-
 
 
 let state = {};    
@@ -333,9 +333,55 @@ $('#recharge-test').addEventListener('click',() => {
         alert(err)
     })
 })
+
+
+
+//路由
+window.addEventListener('popstate',(e)=>{
+    if(e.state === null) return;
+    switch (e.state.url) {
+        case 'acti': 
+            $('.acti-manage').click();
+        break;
+        case 'mess': 
+            $('.message').click();
+        break;
+        case 'data':
+            console.log(e.state.args)
+            state.args.dataShow.pageNum = e.state.args.pageNum;
+            state.dataShow;
+        break;
+    }
+
+})
+window.addEventListener('load',(e)=>{
+    console.log(history.state)
+    switch (history.state.url) {
+        case 'acti': 
+            $('.acti-manage').click();
+        break;
+        case 'mess': 
+            $('.message').click();
+        break;
+        case 'data':
+            // state.args.dataShow = 
+            state.args.dataShow = history.state.args;
+            state.dataShow;
+        break;
+        case 'messCreate': 
+             $('.create').click();
+        break;
+        case 'flow':
+            $('.tips').innerHTML = tipsArr[1];
+            state.args.flowShow = history.state.args;
+            state.flowShow;
+        break;
+    }
+})
 //活动管理
 //显示活动
 $('.acti-manage').addEventListener('click',function() {
+    history.pushState({url: 'acti'},'',pageUrl + 'acti')
     $('.acti').style.display = 'block';
     $('.tips').innerHTML = tipsArr[0];
     if(lastcontentGroupClick !== $('.acti')) {
@@ -350,7 +396,8 @@ function showDetail(act_key) {
     $('.tips').innerHTML = tipsArr[1];
     state.args.flowShow = {actKey : act_key};
     state.flowShow;
-
+    history.pushState({url: 'flow',args: state.args.flowShow},'',pageUrl + 'flow')
+    //console.log(history.state)
 }
 //活动开始修改删除
 $('.acti-main').addEventListener('click',function(e){
@@ -542,6 +589,7 @@ function flowShow(flow_id) {
 //数据管理
 //渲染nav
 $('.nav').addEventListener('click',()=>{
+    
     let ul = '';
     ajax({
         method: 'get',
@@ -568,6 +616,7 @@ $('.nav').addEventListener('click',()=>{
 //数据管理名单渲染  
 //点击nav   
 $('.nav-data-second').addEventListener('click',(e) => {
+    
     if(e.target.classList.contains('data-choose')) {
         $('.order').innerText = e.target.getAttribute('li-title');
         state.args.dataShow = {
@@ -576,6 +625,9 @@ $('.nav-data-second').addEventListener('click',(e) => {
                 pageNum: 1
         };
         state.dataShow; 
+        setTimeout(()=>{
+            history.pushState({url: 'data',args: state.args.dataShow},'',pageUrl + 'data?pageNum=1')
+        },0)
     }
     
 })
@@ -664,9 +716,9 @@ $('.sure').addEventListener('click',()=>{
 //全选
 let checkInfo = false;
 $('#all').addEventListener('click',() => {
-        // Array.prototype.slice.call($('.data-table input')).forEach(function(element) {
-        //     element.checked = !checkInfo;
-        // });
+        Array.prototype.slice.call($('.data-table input')).forEach(function(element) {
+            element.checked = !checkInfo;
+        });
         if(!checkInfo) {
             alert('你已选择了此流程下所有的学生（不仅是本页哦~）');
         }
@@ -859,6 +911,7 @@ $('.page').addEventListener('click',(e) => {
     if(e.target.classList.contains('page-num')) {
         state.args.dataShow.pageNum = e.target.innerText;
         state.dataShow;
+        history.pushState({url: 'data',args: state.args.dataShow},'',pageUrl + 'data?pageNum='+ e.target.innerText)
     }
 })
 //短信发送历史
@@ -873,9 +926,14 @@ $('.show-mess-his-page').addEventListener('click',(e) => {
         state.hisShow;
     }
 })
+
+
+//显示成员选择
+//$('.mess-show-select').addEventListener('change',())
 //短信模板
 //显示短信模板
 $('.message').addEventListener('click',() => {
+    history.pushState({url: 'mess'},'',pageUrl + 'mess')
     if(lastcontentGroupClick !== $('.mess')) {
         $('.mess').style.display = 'block';
         lastcontentGroupClick.style.display = 'none';
@@ -886,6 +944,7 @@ $('.message').addEventListener('click',() => {
 })
 //创建新模板
 $('.create').addEventListener('click',() => {
+    history.pushState({url: 'messCreate'},'',pageUrl + 'messCreate')
     if(lastcontentGroupClick !== $('.template')) {
         $('.template').style.display = 'block';
         lastcontentGroupClick.style.display = 'none';
