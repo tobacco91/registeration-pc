@@ -247,6 +247,10 @@
                     <option value="2">显示未发送短信的学生</option>
                 </select>-->
                 <!-- <button class="his b-btn">短信发送历史</button> -->
+                <div class="search">
+                    <input type="text" placeholder="查找（学号或姓名）" class="search-acti">
+                    <i class="iconfont icon-search3"></i>
+                </div>
                 <button class="send b-btn">发信息</button>
                 <button class="sure b-btn">确认修改分数</button>
                 <button class="up b-btn">升级到下一流程</button>
@@ -353,10 +357,10 @@
         <div class="acti content">
             <span class="add-acti add-activity"><i class="iconfont icon-add1">增加新活动</i></span>
             <div class="acti-fn">
-                <div class="search">
+                <!--<div class="search">
                     <input type="text" placeholder="查找" class="search-acti">
                     <i class="iconfont icon-search3"></i>
-                </div>
+                </div>-->
                 <div class="add-acti">
                     <i class="iconfont icon-add1"></i>
                 </div>
@@ -404,8 +408,8 @@
                         <th>失败原因</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
+                <tbody class="his-tbody">
+                    <!--<tr>
                         <td class="mess-stu-num">2015210111</td>
                         <td class="mess-stu-name">一二三四</td>
                         <td class="mess-num">12345678909</td>
@@ -420,9 +424,10 @@
                         <td class="mess-content">亲爱的一一同学，恭喜你通过了产品面试，请于周日下午晚7点到2117参加二面。收到请回复，加油</td>
                         <td class="mess-succ">否</td>
                         <td class="mess-fail">余额不足啦啦啦</td>
-                    </tr>
+                    </tr>-->
                 </tbody>
             </table>
+            <ul class="show-mess-his-page"></ul>
         </div>
     </div>
 </body>

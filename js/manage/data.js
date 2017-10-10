@@ -30,7 +30,8 @@ $('.nav').addEventListener('click',()=>{
 $('.nav-data-second').addEventListener('click',(e) => {
     
     if(e.target.classList.contains('data-choose')) {
-        $('.order').innerText = e.target.getAttribute('li-title');
+        sessionStorage.title = e.target.getAttribute('li-title');
+        $('.order').innerText = sessionStorage.title;
         state.args.dataShow = {
                 actKey: e.target.getAttribute('activity-id'),
                 flowId: e.target.getAttribute('flow-id'),
@@ -326,18 +327,33 @@ $('.page').addEventListener('click',(e) => {
         history.pushState({url: 'data',args: state.args.dataShow},'',pageUrl + 'data?pageNum='+ e.target.innerText)
     }
 })
-//短信发送历史
-$('.his').addEventListener('click',()=>{
-    openEdit($('.show-mess-his-main'));
-    state.args.hisShow = {pageNum: 1};
-    state.hisShow;
-})
-$('.show-mess-his-page').addEventListener('click',(e) => {
-    if(e.target.classList.contains('page-his-num')) {
-        state.args.hisShow.pageNum = e.target.innerText;
-        state.hisShow;
+//搜索
+let numTest = /^[0-9]*$/,
+    nameTest = /[\u4e00-\u9fa5]/;
+$('.icon-search3').addEventListener('click',() => {
+    if(numTest.test($('.search-acti').value)) {
+        state.args.dataShow.searchType = 'code';
+    } else if (nameTest.test($('.search-acti').value)) {
+        state.args.dataShow.searchType = 'name';
+    } else {
+        alert('输入错误')
     }
+    state.args.dataShow.pageNum = 1;
+    state.args.dataShow.searchValue = $('.search-acti').value;
+    state.dataShow;
 })
+//短信发送历史
+// $('.his').addEventListener('click',()=>{
+//     openEdit($('.show-mess-his-main'));
+//     state.args.hisShow = {pageNum: 1};
+//     state.hisShow;
+// })
+// $('.show-mess-his-page').addEventListener('click',(e) => {
+//     if(e.target.classList.contains('page-his-num')) {
+//         state.args.hisShow.pageNum = e.target.innerText;
+//         state.hisShow;
+//     }
+// })
 
 
 //显示成员选择

@@ -7,7 +7,7 @@ var gulp = require('gulp'),
 };
 gulp.task('scripts', function() {
     // console.log(files.js + 'main.js')
-    return gulp.src([files.js + 'public.js',files.js + 'activity.js',files.js + 'data.js',files.js + 'message.js'])
+    return gulp.src([files.js + 'public.js',files.js + 'activity.js',files.js + 'data.js',files.js + 'message.js',files.js + 'history.js'])
     .pipe(concat('index.js'))
     .pipe(gulp.dest(files.js))
 });

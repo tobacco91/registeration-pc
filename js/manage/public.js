@@ -123,18 +123,27 @@ Object.defineProperties(state,{
 
         },
         get: function() {
+            let data = {
+                token: sessionStorage.token,
+                act_key: state.args.dataShow.actKey,
+                flow_id: state.args.dataShow.flowId,
+                sortby: 'score',
+                sort: 'asc',
+                page: state.args.dataShow.pageNum,
+                per_page: 10
+            }
+            switch(state.args.dataShow.searchType) {
+                case 'code': 
+                    data.stu_code = state.args.dataShow.searchValue;
+                break;
+                case 'name': 
+                    data.name = state.args.dataShow.searchValue;
+                break;
+            }
             ajax({
                 method: 'get',
                 url: url + 'applydata',
-                data: {
-                    token: sessionStorage.token,
-                    act_key: state.args.dataShow.actKey,
-                    flow_id: state.args.dataShow.flowId,
-                    sortby: 'score',
-                    sort: 'asc',
-                    page: state.args.dataShow.pageNum,
-                    per_page: 10
-                },
+                data: data,
                 success: function(res) {
                     state.dataShow = res;
                 }
@@ -142,7 +151,7 @@ Object.defineProperties(state,{
             })
         }
     },
-    //流程显示
+    //流程显
     flowShow: {
         set: function(res) {
             $('.acti-details').children[0].innerHTML = res.data.activity_name;
@@ -256,10 +265,21 @@ Object.defineProperties(state,{
     hisShow: {
         set: function(res) {
             let inner = '';
+            console.log(res)
             res.data.data.map((item)=>{
-                inner += `<li class="show-mess-his-content">内容:${item.content}&emsp;&emsp;是否发送成功:${item.smg === '*' ? '发送失败' : '发送成功'}&emsp;&emsp;失败原因（成功为空)${item.sub_msg === null ? '' : item.sub_msg}</li>`;
+                inner += `<tr>
+                        <td class="mess-stu-num">${item.stu_code}</td>
+                        <td class="mess-stu-name">${item.name}</td>
+                        <td class="mess-num">${item.contact}</td>
+                        <td class="mess-content">${item.content}</td>
+                        <td class="mess-succ">${item.msg === '*' ? '是' : '否'}</td>
+                        <td class="mess-fail">${item.sub_msg === null ? '' : item.sub_msg}</td>
+                    </tr>`
+                // inner += `<li class="show-mess-his-content">内容:${item.content}&emsp;&emsp;是否发送成功:
+                // ${item.smg === '*' ? '发送失败' : '发送成功'}
+                // &emsp;&emsp;失败原因（成功为空)${item.sub_msg === null ? '' : item.sub_msg}</li>`;
             })
-            $('.show-mess-his-ul').innerHTML = inner;
+            $('.his-tbody').innerHTML = inner;
             let page = '';
             let pageClick = 'page-his-click';
             let pageLast = 'page-his-num';
@@ -276,7 +296,7 @@ Object.defineProperties(state,{
                 data: {
                     token: sessionStorage.token,
                     page: state.args.hisShow.pageNum,
-                    per_page: 2,
+                    per_page: 10,
                     status: 1
                 },
                 success: function(res) {
@@ -348,15 +368,34 @@ window.addEventListener('popstate',(e)=>{
             $('.message').click();
         break;
         case 'data':
-            console.log(e.state.args)
+            $('.order').innerText = sessionStorage.title;
+            //console.log(e.state.args)
             state.args.dataShow.pageNum = e.state.args.pageNum;
             state.dataShow;
+        break;
+        case 'his': 
+            $('.show-mess-his-main').style.display = 'block';
+            if(lastcontentGroupClick !== $('.show-mess-his-main')) {
+                lastcontentGroupClick.style.display = 'none';
+                lastcontentGroupClick = $('.show-mess-his-main');
+            }
+            state.args.hisShow = e.state.args;
+            state.hisShow;
+        break;
+        case 'messCreate': 
+             $('.create').click();
+        break;
+        case 'flow':
+            $('.tips').innerHTML = tipsArr[1];
+            state.args.flowShow = e.state.args;
+            state.flowShow;
         break;
     }
 
 })
 window.addEventListener('load',(e)=>{
-    console.log(history.state)
+    console.log('load')
+    if(history.state === null) return;
     switch (history.state.url) {
         case 'acti': 
             $('.acti-manage').click();
@@ -365,6 +404,7 @@ window.addEventListener('load',(e)=>{
             $('.message').click();
         break;
         case 'data':
+            $('.order').innerText = sessionStorage.title;
             state.args.dataShow = history.state.args;
             state.dataShow;
         break;
@@ -375,6 +415,16 @@ window.addEventListener('load',(e)=>{
             $('.tips').innerHTML = tipsArr[1];
             state.args.flowShow = history.state.args;
             state.flowShow;
+        break;
+        case 'his': 
+        $('.show-mess-his-main').style.display = 'block';
+        if(lastcontentGroupClick !== $('.show-mess-his-main')) {
+            lastcontentGroupClick.style.display = 'none';
+            lastcontentGroupClick = $('.show-mess-his-main');
+        }
+        //console.log(history.state.args)
+        state.args.hisShow = history.state.args;
+        state.hisShow;
         break;
     }
 })

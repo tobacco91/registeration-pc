@@ -123,18 +123,27 @@ Object.defineProperties(state,{
 
         },
         get: function() {
+            let data = {
+                token: sessionStorage.token,
+                act_key: state.args.dataShow.actKey,
+                flow_id: state.args.dataShow.flowId,
+                sortby: 'score',
+                sort: 'asc',
+                page: state.args.dataShow.pageNum,
+                per_page: 10
+            }
+            switch(state.args.dataShow.searchType) {
+                case 'code': 
+                    data.stu_code = state.args.dataShow.searchValue;
+                break;
+                case 'name': 
+                    data.name = state.args.dataShow.searchValue;
+                break;
+            }
             ajax({
                 method: 'get',
                 url: url + 'applydata',
-                data: {
-                    token: sessionStorage.token,
-                    act_key: state.args.dataShow.actKey,
-                    flow_id: state.args.dataShow.flowId,
-                    sortby: 'score',
-                    sort: 'asc',
-                    page: state.args.dataShow.pageNum,
-                    per_page: 10
-                },
+                data: data,
                 success: function(res) {
                     state.dataShow = res;
                 }
@@ -142,7 +151,7 @@ Object.defineProperties(state,{
             })
         }
     },
-    //流程显示
+    //流程显
     flowShow: {
         set: function(res) {
             $('.acti-details').children[0].innerHTML = res.data.activity_name;
@@ -256,10 +265,21 @@ Object.defineProperties(state,{
     hisShow: {
         set: function(res) {
             let inner = '';
+            console.log(res)
             res.data.data.map((item)=>{
-                inner += `<li class="show-mess-his-content">内容:${item.content}&emsp;&emsp;是否发送成功:${item.smg === '*' ? '发送失败' : '发送成功'}&emsp;&emsp;失败原因（成功为空)${item.sub_msg === null ? '' : item.sub_msg}</li>`;
+                inner += `<tr>
+                        <td class="mess-stu-num">${item.stu_code}</td>
+                        <td class="mess-stu-name">${item.name}</td>
+                        <td class="mess-num">${item.contact}</td>
+                        <td class="mess-content">${item.content}</td>
+                        <td class="mess-succ">${item.msg === '*' ? '是' : '否'}</td>
+                        <td class="mess-fail">${item.sub_msg === null ? '' : item.sub_msg}</td>
+                    </tr>`
+                // inner += `<li class="show-mess-his-content">内容:${item.content}&emsp;&emsp;是否发送成功:
+                // ${item.smg === '*' ? '发送失败' : '发送成功'}
+                // &emsp;&emsp;失败原因（成功为空)${item.sub_msg === null ? '' : item.sub_msg}</li>`;
             })
-            $('.show-mess-his-ul').innerHTML = inner;
+            $('.his-tbody').innerHTML = inner;
             let page = '';
             let pageClick = 'page-his-click';
             let pageLast = 'page-his-num';
@@ -276,7 +296,7 @@ Object.defineProperties(state,{
                 data: {
                     token: sessionStorage.token,
                     page: state.args.hisShow.pageNum,
-                    per_page: 2,
+                    per_page: 10,
                     status: 1
                 },
                 success: function(res) {
@@ -348,15 +368,34 @@ window.addEventListener('popstate',(e)=>{
             $('.message').click();
         break;
         case 'data':
-            console.log(e.state.args)
+            $('.order').innerText = sessionStorage.title;
+            //console.log(e.state.args)
             state.args.dataShow.pageNum = e.state.args.pageNum;
             state.dataShow;
+        break;
+        case 'his': 
+            $('.show-mess-his-main').style.display = 'block';
+            if(lastcontentGroupClick !== $('.show-mess-his-main')) {
+                lastcontentGroupClick.style.display = 'none';
+                lastcontentGroupClick = $('.show-mess-his-main');
+            }
+            state.args.hisShow = e.state.args;
+            state.hisShow;
+        break;
+        case 'messCreate': 
+             $('.create').click();
+        break;
+        case 'flow':
+            $('.tips').innerHTML = tipsArr[1];
+            state.args.flowShow = e.state.args;
+            state.flowShow;
         break;
     }
 
 })
 window.addEventListener('load',(e)=>{
-    console.log(history.state)
+    console.log('load')
+    if(history.state === null) return;
     switch (history.state.url) {
         case 'acti': 
             $('.acti-manage').click();
@@ -365,6 +404,7 @@ window.addEventListener('load',(e)=>{
             $('.message').click();
         break;
         case 'data':
+            $('.order').innerText = sessionStorage.title;
             state.args.dataShow = history.state.args;
             state.dataShow;
         break;
@@ -376,12 +416,21 @@ window.addEventListener('load',(e)=>{
             state.args.flowShow = history.state.args;
             state.flowShow;
         break;
+        case 'his': 
+        $('.show-mess-his-main').style.display = 'block';
+        if(lastcontentGroupClick !== $('.show-mess-his-main')) {
+            lastcontentGroupClick.style.display = 'none';
+            lastcontentGroupClick = $('.show-mess-his-main');
+        }
+        //console.log(history.state.args)
+        state.args.hisShow = history.state.args;
+        state.hisShow;
+        break;
     }
 })
 //活动管理
 //显示活动
 $('.acti-manage').addEventListener('click',function() {
-    history.pushState({url: 'acti'},'',pageUrl + 'acti')
     $('.acti').style.display = 'block';
     $('.tips').innerHTML = tipsArr[0];
     if(lastcontentGroupClick !== $('.acti')) {
@@ -389,6 +438,7 @@ $('.acti-manage').addEventListener('click',function() {
         lastcontentGroupClick = $('.acti');
     }
     state.actiShow;
+    history.pushState({url: 'acti'},'',pageUrl + 'acti')
 })
 //显示流程
 function showDetail(act_key) {
@@ -618,7 +668,8 @@ $('.nav').addEventListener('click',()=>{
 $('.nav-data-second').addEventListener('click',(e) => {
     
     if(e.target.classList.contains('data-choose')) {
-        $('.order').innerText = e.target.getAttribute('li-title');
+        sessionStorage.title = e.target.getAttribute('li-title');
+        $('.order').innerText = sessionStorage.title;
         state.args.dataShow = {
                 actKey: e.target.getAttribute('activity-id'),
                 flowId: e.target.getAttribute('flow-id'),
@@ -914,18 +965,33 @@ $('.page').addEventListener('click',(e) => {
         history.pushState({url: 'data',args: state.args.dataShow},'',pageUrl + 'data?pageNum='+ e.target.innerText)
     }
 })
-//短信发送历史
-$('.his').addEventListener('click',()=>{
-    openEdit($('.show-mess-his-main'));
-    state.args.hisShow = {pageNum: 1};
-    state.hisShow;
-})
-$('.show-mess-his-page').addEventListener('click',(e) => {
-    if(e.target.classList.contains('page-his-num')) {
-        state.args.hisShow.pageNum = e.target.innerText;
-        state.hisShow;
+//搜索
+let numTest = /^[0-9]*$/,
+    nameTest = /[\u4e00-\u9fa5]/;
+$('.icon-search3').addEventListener('click',() => {
+    if(numTest.test($('.search-acti').value)) {
+        state.args.dataShow.searchType = 'code';
+    } else if (nameTest.test($('.search-acti').value)) {
+        state.args.dataShow.searchType = 'name';
+    } else {
+        alert('输入错误')
     }
+    state.args.dataShow.pageNum = 1;
+    state.args.dataShow.searchValue = $('.search-acti').value;
+    state.dataShow;
 })
+//短信发送历史
+// $('.his').addEventListener('click',()=>{
+//     openEdit($('.show-mess-his-main'));
+//     state.args.hisShow = {pageNum: 1};
+//     state.hisShow;
+// })
+// $('.show-mess-his-page').addEventListener('click',(e) => {
+//     if(e.target.classList.contains('page-his-num')) {
+//         state.args.hisShow.pageNum = e.target.innerText;
+//         state.hisShow;
+//     }
+// })
 
 
 //显示成员选择
@@ -1062,4 +1128,22 @@ $('#add-mess-finish').addEventListener('click',() => {
         })
     }
 
+})
+//显示短信历史
+$('.his').addEventListener('click',function() {
+    $('.show-mess-his-main').style.display = 'block';
+    if(lastcontentGroupClick !== $('.show-mess-his-main')) {
+        lastcontentGroupClick.style.display = 'none';
+        lastcontentGroupClick = $('.show-mess-his-main');
+    }
+    state.args.hisShow = {pageNum: 1};
+    state.hisShow;
+    history.pushState({url: 'his',args:state.args.hisShow},'',pageUrl + 'his?pageNum=1')
+})
+$('.show-mess-his-page').addEventListener('click',(e) => {
+    if(e.target.classList.contains('page-his-num')) {
+        state.args.hisShow.pageNum = e.target.innerText;
+        state.hisShow;
+        history.pushState({url: 'his',args: state.args.hisShow},'',pageUrl + 'his?pageNum='+ e.target.innerText)
+    }
 })

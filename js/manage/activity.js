@@ -1,7 +1,6 @@
 //活动管理
 //显示活动
 $('.acti-manage').addEventListener('click',function() {
-    history.pushState({url: 'acti'},'',pageUrl + 'acti')
     $('.acti').style.display = 'block';
     $('.tips').innerHTML = tipsArr[0];
     if(lastcontentGroupClick !== $('.acti')) {
@@ -9,6 +8,7 @@ $('.acti-manage').addEventListener('click',function() {
         lastcontentGroupClick = $('.acti');
     }
     state.actiShow;
+    history.pushState({url: 'acti'},'',pageUrl + 'acti')
 })
 //显示流程
 function showDetail(act_key) {

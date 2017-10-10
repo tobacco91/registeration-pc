@@ -157,3 +157,21 @@ textarea {
     color: #fff;
     text-align: center;
 }
+.show-mess-his-main {
+    display: none;
+    text-align: center;
+}
+.show-mess-his-page {
+    display: inline-block;
+}
+.page-his-click {
+    float: left;
+    margin-left: 10px;
+    color: #1abc9c;
+    cursor: pointer;
+}
+.page-his-num {
+    float: left;
+    margin-left: 10px;
+    cursor: pointer;
+}

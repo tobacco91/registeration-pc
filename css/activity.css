@@ -14,8 +14,8 @@
 }
 .search {
     float: left;
-    margin-top: 10px;
-    width: 400px;
+    margin: 10px 0 0 80px;
+    width: 200px;
     height: 40px;
     line-height: 40px;
     border-radius: 20px;
@@ -23,7 +23,7 @@
 }
 .search-acti {
     margin-left: 20px;
-    width: 300px;
+    width: 120px;
     height: 20px;
     border: 0;
     line-height: 20px;
