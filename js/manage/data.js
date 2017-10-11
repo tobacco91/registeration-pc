@@ -133,9 +133,9 @@ $('#all').addEventListener('click',() => {
             element.checked = !checkInfo;
         });
 
-        // if(!checkInfo) {
-        //     alert('你已选择了此流程下所有的学生（不仅是本页哦~）');
-        // }
+        if(!checkInfo) {
+            alert('只有本页');
+        }
         checkInfo = !checkInfo;
 })
 
