@@ -314,7 +314,7 @@ Object.defineProperties(state,{
             res.sms_variables.map(item => {
                 p += `<p>${item}:<input type="text" class="${item}">`;
                 if(res.dynamic_variables[item] !== '') {
-                    let option = `<option value="0">不选</option>`;
+                    let option = `<option value="">不选</option>`;
                     let select = '';
                     for (let i in res.dynamic_variables[item]) {
                         //console.log(res.dynamic_variables[item][i])
@@ -328,7 +328,12 @@ Object.defineProperties(state,{
                 
             })
             $('.temp-list-var').innerHTML = p;
-           console.log($('.temp-list-var select'))//arr or单个
+            let selectChange = Array.prototype.slice.call(document.querySelectorAll('.temp-list-var select'));
+            selectChange.forEach(function(element) {
+                    element.onchange = function(e) {
+                        e.currentTarget.previousSibling.value = e.currentTarget.value;
+                    }
+            }, this);
         }
     }
 })

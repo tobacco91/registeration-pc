@@ -142,3 +142,8 @@ $('#add-mess-finish').addEventListener('click',() => {
     }
 
 })
+
+function changeValue(value,ele) {
+    ele.value = value;
+    
+}
