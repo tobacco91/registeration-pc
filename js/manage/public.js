@@ -143,6 +143,7 @@ Object.defineProperties(state,{
                     data.name = state.args.dataShow.searchValue;
                 break;
             }
+            //console.log(data)
             ajax({
                 method: 'get',
                 url: url + 'applydata',

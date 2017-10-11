@@ -143,6 +143,7 @@ Object.defineProperties(state,{
                     data.name = state.args.dataShow.searchValue;
                 break;
             }
+            //console.log(data)
             ajax({
                 method: 'get',
                 url: url + 'applydata',
@@ -822,9 +823,10 @@ $('#all').addEventListener('click',() => {
         Array.prototype.slice.call($('.data-table input')).forEach(function(element) {
             element.checked = !checkInfo;
         });
-        if(!checkInfo) {
-            alert('你已选择了此流程下所有的学生（不仅是本页哦~）');
-        }
+
+        // if(!checkInfo) {
+        //     alert('你已选择了此流程下所有的学生（不仅是本页哦~）');
+        // }
         checkInfo = !checkInfo;
 })
 
@@ -906,27 +908,27 @@ $('.up').addEventListener('click',() => {
 $('.send').addEventListener('click',() => {
     new Promise((resolve,reject) => {
         let checked = [];
-        if(checkInfo) {
-            ajax({
-                method: 'get',
-                url: url + 'applydata',
-                data: {
-                    token: sessionStorage.token,
-                    act_key: state.args.dataShow.actKey,
-                    flow_id: state.args.dataShow.flowId,
-                    sortby: 'score',
-                    sort: 'asc',
-                    page: 1,
-                    per_page: 1000000
-                },
-                success: function(res) {
-                    res.date.data.map((item) => {
-                        checked.push(item.enroll_id)
-                    })
-                    resolve(checked)
-                }
-            })
-        } else {
+        // if(checkInfo) {
+        //     ajax({
+        //         method: 'get',
+        //         url: url + 'applydata',
+        //         data: {
+        //             token: sessionStorage.token,
+        //             act_key: state.args.dataShow.actKey,
+        //             flow_id: state.args.dataShow.flowId,
+        //             sortby: 'score',
+        //             sort: 'asc',
+        //             page: 1,
+        //             per_page: 1000000
+        //         },
+        //         success: function(res) {
+        //             res.date.data.map((item) => {
+        //                 checked.push(item.enroll_id)
+        //             })
+        //             resolve(checked)
+        //         }
+        //     })
+        // } else {
             [].slice.call($('.check input'))
             .map((ele,index) => {
                 if(ele.checked === true && ele.getAttribute('id') !== 'all') {
@@ -935,7 +937,7 @@ $('.send').addEventListener('click',() => {
                 }
             })
             resolve(checked);
-        }
+        //}
     }).then((checked) => {
         console.log(checked)
         ajax({
@@ -1007,7 +1009,16 @@ function uploadFile() {
 
 //导出excel
 $('.export').addEventListener('click',()=>{
-    window.location.href = `${url}applydata/excel?token=${sessionStorage.token}&act_key=${state.args.dataShow.actKey}&flow_id=${state.args.dataShow.flowId}&sortby=grade&sort=asc`;
+    let args = '';
+    switch(state.args.dataShow.searchType) {
+        case 'code': 
+            args = `&stu_code=${state.args.dataShow.searchValue}`;
+        break;
+        case 'name': 
+            args = `&name=${state.args.dataShow.searchValue}`;
+        break;
+    }
+    window.location.href = `${url}applydata/excel?token=${sessionStorage.token}&act_key=${state.args.dataShow.actKey}&flow_id=${state.args.dataShow.flowId}&sortby=grade&sort=asc${args}`;
 })
 //分页
 $('.page').addEventListener('click',(e) => {
@@ -1028,6 +1039,7 @@ $('.icon-search3').addEventListener('click',() => {
     } else {
         alert('输入错误')
     }
+    //console.log(state.args.dataShow.searchType)
     state.args.dataShow.pageNum = 1;
     state.args.dataShow.searchValue = $('.search-acti').value;
     state.dataShow;
