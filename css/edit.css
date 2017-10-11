@@ -34,7 +34,7 @@
     left: 0;
     right: 0;
     width: 400px;
-    height: 300px;
+    max-height: 500px;
     border-radius: 10px;
     background-color: rgba(104, 103, 104, 0.5);
     color: #fff;
@@ -161,4 +161,8 @@
     float: left;
     margin-left: 10px;
     cursor: pointer;
+}
+
+.prompt-main {
+    display: none;
 }

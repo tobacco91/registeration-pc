@@ -61,7 +61,10 @@ function ajax(conf) {
                 success(xhr.responseText);
             }
         } else if (xhr.readyState === 4 && errorInfo.test(xhr.status)) {
-            console.log(xhr.status)
+            // if(xhr.status === 400) {
+            //     alert('时间过长，请重新登录');
+            //     return;
+            // }
             if(error !== undefined) {
                 error(JSON.parse(xhr.responseText));
             }
@@ -151,13 +154,14 @@ Object.defineProperties(state,{
             })
         }
     },
-    //流程显
+    //流程显shi
     flowShow: {
         set: function(res) {
-            $('.acti-details').children[0].innerHTML = res.data.activity_name;
-            $('.acti-details').children[1].innerHTML = `已有${res.data.current_num}人报名`;
-            $('.acti-details').children[2].innerHTML = res.data.time_description;
-            $('.acti-details').children[3].innerHTML = res.data.summary;
+            $('.acti-details').children[1].innerHTML = res.data.activity_name;
+            $('.acti-details').children[2].innerHTML = `已有${res.data.current_num}人报名`;
+            $('.acti-details').children[3].innerHTML =  '时间描述：'+ res.data.time_description;
+            $('.acti-details').children[4].innerHTML = '活动简介：' + res.data.summary;
+            $('.acti-details').children[5].innerHTML = `<span>创建时间：${res.data.created_at}</span><span>结束时间：${res.data.end_time}</span>`;
             $('.acti-details-interview').innerHTML = '';
             console.log(res)
             res.data.flowList.map(function(e) {
@@ -311,13 +315,13 @@ Object.defineProperties(state,{
     tempList: {
         set: function(res) {
             let p = '';
+            state.args.tempList = res.sms_variables;
             res.sms_variables.map(item => {
                 p += `<p>${item}:<input type="text" class="${item}">`;
                 if(res.dynamic_variables[item] !== '') {
                     let option = `<option value="">不选</option>`;
                     let select = '';
                     for (let i in res.dynamic_variables[item]) {
-                        //console.log(res.dynamic_variables[item][i])
                         option += `<option value="${i}">${res.dynamic_variables[item][i]}</option>`
                     }
                     select = `<select>${option}</select>`;
@@ -385,90 +389,3 @@ $('#recharge-test').addEventListener('click',() => {
 
 
 
-//路由
-window.addEventListener('popstate',(e)=>{
-    if(e.state === null) return;
-    switch (e.state.url) {
-        case 'acti': 
-        $('.acti').style.display = 'block';
-        $('.tips').innerHTML = tipsArr[0];
-        if(lastcontentGroupClick !== $('.acti')) {
-            lastcontentGroupClick.style.display = 'none';
-            lastcontentGroupClick = $('.acti');
-        }
-        state.actiShow;
-            //$('.acti-manage').click();
-        break;
-        case 'mess': 
-            //$('.message').click();
-            if(lastcontentGroupClick !== $('.mess')) {
-                $('.mess').style.display = 'block';
-                lastcontentGroupClick.style.display = 'none';
-                lastcontentGroupClick = $('.mess');
-            }
-            state.messShow;
-        break;
-        case 'data':
-            $('.order').innerText = sessionStorage.title;
-            state.args.dataShow.pageNum = e.state.args.pageNum;
-            state.dataShow;
-        break;
-        case 'his': 
-            $('.show-mess-his-main').style.display = 'block';
-            if(lastcontentGroupClick !== $('.show-mess-his-main')) {
-                lastcontentGroupClick.style.display = 'none';
-                lastcontentGroupClick = $('.show-mess-his-main');
-            }
-            state.args.hisShow = e.state.args;
-            state.hisShow;
-        break;
-        case 'messCreate': 
-            if(lastcontentGroupClick !== $('.template')) {
-                $('.template').style.display = 'block';
-                lastcontentGroupClick.style.display = 'none';
-                lastcontentGroupClick = $('.template');
-            }
-        break;
-        case 'flow':
-            $('.tips').innerHTML = tipsArr[1];
-            state.args.flowShow = e.state.args;
-            state.flowShow;
-        break;
-    }
-
-})
-window.addEventListener('load',(e)=>{
-    //console.log('load')
-    if(history.state === null) return;
-    switch (history.state.url) {
-        case 'acti': 
-            $('.acti-manage').click();
-        break;
-        case 'mess': 
-            $('.message').click();
-        break;
-        case 'data':
-            $('.order').innerText = sessionStorage.title;
-            state.args.dataShow = history.state.args;
-            state.dataShow;
-        break;
-        case 'messCreate': 
-             $('.create').click();
-        break;
-        case 'flow':
-            $('.tips').innerHTML = tipsArr[1];
-            state.args.flowShow = history.state.args;
-            state.flowShow;
-        break;
-        case 'his': 
-        $('.show-mess-his-main').style.display = 'block';
-        if(lastcontentGroupClick !== $('.show-mess-his-main')) {
-            lastcontentGroupClick.style.display = 'none';
-            lastcontentGroupClick = $('.show-mess-his-main');
-        }
-        //console.log(history.state.args)
-        state.args.hisShow = history.state.args;
-        state.hisShow;
-        break;
-    }
-})

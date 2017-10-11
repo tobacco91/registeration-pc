@@ -98,3 +98,6 @@
     background-color: #33a09a;
     cursor: pointer;
 }
+.acti-details h4,h5 {
+    text-align: center;
+}

@@ -61,7 +61,10 @@ function ajax(conf) {
                 success(xhr.responseText);
             }
         } else if (xhr.readyState === 4 && errorInfo.test(xhr.status)) {
-            console.log(xhr.status)
+            // if(xhr.status === 400) {
+            //     alert('时间过长，请重新登录');
+            //     return;
+            // }
             if(error !== undefined) {
                 error(JSON.parse(xhr.responseText));
             }
@@ -151,13 +154,14 @@ Object.defineProperties(state,{
             })
         }
     },
-    //流程显
+    //流程显shi
     flowShow: {
         set: function(res) {
-            $('.acti-details').children[0].innerHTML = res.data.activity_name;
-            $('.acti-details').children[1].innerHTML = `已有${res.data.current_num}人报名`;
-            $('.acti-details').children[2].innerHTML = res.data.time_description;
-            $('.acti-details').children[3].innerHTML = res.data.summary;
+            $('.acti-details').children[1].innerHTML = res.data.activity_name;
+            $('.acti-details').children[2].innerHTML = `已有${res.data.current_num}人报名`;
+            $('.acti-details').children[3].innerHTML =  '时间描述：'+ res.data.time_description;
+            $('.acti-details').children[4].innerHTML = '活动简介：' + res.data.summary;
+            $('.acti-details').children[5].innerHTML = `<span>创建时间：${res.data.created_at}</span><span>结束时间：${res.data.end_time}</span>`;
             $('.acti-details-interview').innerHTML = '';
             console.log(res)
             res.data.flowList.map(function(e) {
@@ -311,13 +315,13 @@ Object.defineProperties(state,{
     tempList: {
         set: function(res) {
             let p = '';
+            state.args.tempList = res.sms_variables;
             res.sms_variables.map(item => {
                 p += `<p>${item}:<input type="text" class="${item}">`;
                 if(res.dynamic_variables[item] !== '') {
                     let option = `<option value="">不选</option>`;
                     let select = '';
                     for (let i in res.dynamic_variables[item]) {
-                        //console.log(res.dynamic_variables[item][i])
                         option += `<option value="${i}">${res.dynamic_variables[item][i]}</option>`
                     }
                     select = `<select>${option}</select>`;
@@ -382,6 +386,7 @@ $('#recharge-test').addEventListener('click',() => {
         alert(err)
     })
 })
+
 
 
 
@@ -472,11 +477,13 @@ window.addEventListener('load',(e)=>{
         break;
     }
 })
+
+
 //活动管理
 //显示活动
 $('.acti-manage').addEventListener('click',function() {
     $('.acti').style.display = 'block';
-    $('.tips').innerHTML = tipsArr[0];
+    $('.acti-tips').innerHTML = tipsArr[0];
     if(lastcontentGroupClick !== $('.acti')) {
         lastcontentGroupClick.style.display = 'none';
         lastcontentGroupClick = $('.acti');
@@ -487,7 +494,7 @@ $('.acti-manage').addEventListener('click',function() {
 //显示流程
 function showDetail(act_key) {
     //console.log(act_key)
-    $('.tips').innerHTML = tipsArr[1];
+    $('.flow-tips').innerHTML = tipsArr[1];
     state.args.flowShow = {actKey : act_key};
     state.flowShow;
     history.pushState({url: 'flow',args: state.args.flowShow},'',pageUrl + 'flow')
@@ -665,17 +672,17 @@ function flowShow(flow_id) {
             token: sessionStorage.token,
         },
         success: function(res) {
+            let variables = '';
             let arr = ['报名','面试','笔试'];
             let inner = `<h3>流程详情</h3>
                 <p>流程名：${res.data.flow_name}</p>
                 <p>地点：${res.data.location}</p>
                 <p>报名方式：${arr[res.data.type]}</p>
-                <p>时间：${res.data.time_description}</p>
-                <p>短信模板：${res.data.sms_temp}</p>
-                <p>短信模板中的name：各自的名字</p>
-                <p>短信模板中的content：${res.data.sms_variables.content}</p>
-                <p>短信模板中的next：${res.data.sms_variables.next}</p>`
-            $('.show-flow-main-mess').innerHTML = inner;
+                <p>短信模板：${res.data.sms_temp === undefined ? '未绑定短信模板' : res.data.sms_temp}</p>`
+            for(let i in res.data.sms_variables) {
+                variables += `<p>短信模板中的${i}：${res.data.sms_variables[i]}</p>`
+            }
+            $('.show-flow-main-mess').innerHTML = inner + variables;
             openEdit($('.show-flow-main'));
         }
     })
@@ -1142,19 +1149,22 @@ $('.add-var').addEventListener('click',() => {
 })
 //点击短信模板增加or修改的完成按钮
 $('#add-mess-finish').addEventListener('click',() => {
-
+    let data = {
+        admin_temp_id: $('.add-mess-temp').value,
+        temp_name: $('.add-mess-title').value
+    };
+    state.args.tempList.forEach(function(element,index) {
+        data['variables['+ element + ']'] = $('.temp-list-var').children[index].children[0].value;
+        $('.temp-list-var').children[index].children[0]
+    }, this);
+    //console.log(data)
     if($('#add-mess-finish').getAttribute('change-type') === 'change') {
         ajax({
             method: 'put',
             url: url + 'sms/'+ $('#add-mess-finish').getAttribute('admin-temp-id') + '?token=' + sessionStorage.token,
-            data: {
-                admin_temp_id: $('.add-mess-order').value,
-                temp_name: $('.add-mess-title').value,
-                'variables[name]': '${full_name}',
-                'variables[content]': $('.add-mess-content').value,
-                'variables[next]': $('.add-mess-date').value
-            },
+            data: data,
             success: function(res) {
+                state.messShow;
                 alert('修改成功')
             },
             error: function(res) {
@@ -1167,13 +1177,7 @@ $('#add-mess-finish').addEventListener('click',() => {
             method: 'post',
             url: url + 'sms/?token=' + sessionStorage.token,
             type: 'form',
-            data: {
-                admin_temp_id: $('.add-mess-temp').value,
-                temp_name: $('.add-mess-title').value,
-                'variables[name]': '${full_name}',
-                'variables[content]': $('.add-mess-content').value,
-                'variables[next]': $('.add-mess-date').value
-            },
+            data: data,
             success: function(res) {
                 alert('添加成功');
             },
@@ -1186,10 +1190,7 @@ $('#add-mess-finish').addEventListener('click',() => {
 
 })
 
-function changeValue(value,ele) {
-    ele.value = value;
-    
-}
+
 //显示短信历史
 $('.his').addEventListener('click',function() {
     $('.show-mess-his-main').style.display = 'block';

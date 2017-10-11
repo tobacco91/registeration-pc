@@ -2,7 +2,7 @@
 //显示活动
 $('.acti-manage').addEventListener('click',function() {
     $('.acti').style.display = 'block';
-    $('.tips').innerHTML = tipsArr[0];
+    $('.acti-tips').innerHTML = tipsArr[0];
     if(lastcontentGroupClick !== $('.acti')) {
         lastcontentGroupClick.style.display = 'none';
         lastcontentGroupClick = $('.acti');
@@ -13,7 +13,7 @@ $('.acti-manage').addEventListener('click',function() {
 //显示流程
 function showDetail(act_key) {
     //console.log(act_key)
-    $('.tips').innerHTML = tipsArr[1];
+    $('.flow-tips').innerHTML = tipsArr[1];
     state.args.flowShow = {actKey : act_key};
     state.flowShow;
     history.pushState({url: 'flow',args: state.args.flowShow},'',pageUrl + 'flow')
@@ -191,17 +191,17 @@ function flowShow(flow_id) {
             token: sessionStorage.token,
         },
         success: function(res) {
+            let variables = '';
             let arr = ['报名','面试','笔试'];
             let inner = `<h3>流程详情</h3>
                 <p>流程名：${res.data.flow_name}</p>
                 <p>地点：${res.data.location}</p>
                 <p>报名方式：${arr[res.data.type]}</p>
-                <p>时间：${res.data.time_description}</p>
-                <p>短信模板：${res.data.sms_temp}</p>
-                <p>短信模板中的name：各自的名字</p>
-                <p>短信模板中的content：${res.data.sms_variables.content}</p>
-                <p>短信模板中的next：${res.data.sms_variables.next}</p>`
-            $('.show-flow-main-mess').innerHTML = inner;
+                <p>短信模板：${res.data.sms_temp === undefined ? '未绑定短信模板' : res.data.sms_temp}</p>`
+            for(let i in res.data.sms_variables) {
+                variables += `<p>短信模板中的${i}：${res.data.sms_variables[i]}</p>`
+            }
+            $('.show-flow-main-mess').innerHTML = inner + variables;
             openEdit($('.show-flow-main'));
         }
     })

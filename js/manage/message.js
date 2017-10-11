@@ -99,19 +99,22 @@ $('.add-var').addEventListener('click',() => {
 })
 //点击短信模板增加or修改的完成按钮
 $('#add-mess-finish').addEventListener('click',() => {
-
+    let data = {
+        admin_temp_id: $('.add-mess-temp').value,
+        temp_name: $('.add-mess-title').value
+    };
+    state.args.tempList.forEach(function(element,index) {
+        data['variables['+ element + ']'] = $('.temp-list-var').children[index].children[0].value;
+        $('.temp-list-var').children[index].children[0]
+    }, this);
+    //console.log(data)
     if($('#add-mess-finish').getAttribute('change-type') === 'change') {
         ajax({
             method: 'put',
             url: url + 'sms/'+ $('#add-mess-finish').getAttribute('admin-temp-id') + '?token=' + sessionStorage.token,
-            data: {
-                admin_temp_id: $('.add-mess-order').value,
-                temp_name: $('.add-mess-title').value,
-                'variables[name]': '${full_name}',
-                'variables[content]': $('.add-mess-content').value,
-                'variables[next]': $('.add-mess-date').value
-            },
+            data: data,
             success: function(res) {
+                state.messShow;
                 alert('修改成功')
             },
             error: function(res) {
@@ -124,13 +127,7 @@ $('#add-mess-finish').addEventListener('click',() => {
             method: 'post',
             url: url + 'sms/?token=' + sessionStorage.token,
             type: 'form',
-            data: {
-                admin_temp_id: $('.add-mess-temp').value,
-                temp_name: $('.add-mess-title').value,
-                'variables[name]': '${full_name}',
-                'variables[content]': $('.add-mess-content').value,
-                'variables[next]': $('.add-mess-date').value
-            },
+            data: data,
             success: function(res) {
                 alert('添加成功');
             },
@@ -143,7 +140,3 @@ $('#add-mess-finish').addEventListener('click',() => {
 
 })
 
-function changeValue(value,ele) {
-    ele.value = value;
-    
-}
