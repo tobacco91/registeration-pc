@@ -62,13 +62,14 @@ $('.mess-tbody').addEventListener('click',(e) => {
                 token: sessionStorage.token
             },
             success: function(res) {
-                console.log(res.data.variables)
+                //console.log(res.data.variables)
+                let variables = '';
                 let inner = `<h3>短信模板详情</h3>
-                <p>短信模板：${res.data.content}</p>
-                <p>name:默认所有报名的同学各自的姓名</p>
-                <p>content：${res.data.variables.content}</p>
-                <p>next：${res.data.variables.next}</p>`
-                $('.show-mess-main-mess').innerHTML = inner;
+                <p>短信模板：${res.data.content}</p>`
+                for(let i in res.data.variables) {
+                    variables += `<p>${i}：${res.data.variables[i]}</p>`
+                }
+                $('.show-mess-main-mess').innerHTML = inner + variables;
                 openEdit($('.show-mess-main'));
             }
         })
