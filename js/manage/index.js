@@ -824,9 +824,9 @@ $('#all').addEventListener('click',() => {
             element.checked = !checkInfo;
         });
 
-        // if(!checkInfo) {
-        //     alert('你已选择了此流程下所有的学生（不仅是本页哦~）');
-        // }
+        if(!checkInfo) {
+            alert('只有本页');
+        }
         checkInfo = !checkInfo;
 })
 
@@ -1166,11 +1166,18 @@ $('#add-mess-finish').addEventListener('click',() => {
         admin_temp_id: $('.add-mess-temp').value,
         temp_name: $('.add-mess-title').value
     };
+    let alertInfo = false;
     state.args.tempList.forEach(function(element,index) {
         data['variables['+ element + ']'] = $('.temp-list-var').children[index].children[0].value;
-        $('.temp-list-var').children[index].children[0]
+        console.log($('.temp-list-var').children[index].children[0].value.length);
+        if($('.temp-list-var').children[index].children[0].value.length > 15 && !alertInfo) {
+            alert('短信模板的变量赋值的时候不允许超过15个字符');
+            alertInfo = true;
+        }
     }, this);
-    //console.log(data)
+    if(alertInfo) {
+        return;
+    }
     if($('#add-mess-finish').getAttribute('change-type') === 'change') {
         ajax({
             method: 'put',
