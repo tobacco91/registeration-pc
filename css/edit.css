@@ -166,3 +166,14 @@
 .prompt-main {
     display: none;
 }
+
+.excel-table {
+    background-color: #fff;
+    margin: 0 auto;
+    width: 600px;
+}
+.excel-title {
+    margin-top: 200px;
+    font-size: 30px;
+    color: #1abc9c;
+}
