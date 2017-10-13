@@ -277,12 +277,9 @@ Object.defineProperties(state,{
                         <td class="mess-stu-name">${item.name}</td>
                         <td class="mess-num">${item.contact}</td>
                         <td class="mess-content">${item.content}</td>
-                        <td class="mess-succ">${item.msg === '*'||'OK' ? '是' : '否'}</td>
+                        <td class="mess-succ">${item.msg === '*'|| item.msg === 'OK' ? '是' : '否'}</td>
                         <td class="mess-fail">${item.sub_msg === null ? '' : item.sub_msg}</td>
                     </tr>`
-                // inner += `<li class="show-mess-his-content">内容:${item.content}&emsp;&emsp;是否发送成功:
-                // ${item.smg === '*' ? '发送失败' : '发送成功'}
-                // &emsp;&emsp;失败原因（成功为空)${item.sub_msg === null ? '' : item.sub_msg}</li>`;
             })
             $('.his-tbody').innerHTML = inner;
             let page = '';
